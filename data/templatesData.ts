@@ -1,0 +1,90 @@
+
+// FIX: Added .ts extension to import path
+import { TaskTemplate } from '../types.ts';
+
+export const templates: TaskTemplate[] = [
+  {
+    id: 'tpl-1',
+    name: 'New Employee Onboarding',
+    description: 'A standard set of tasks for onboarding a new staff member.',
+    category: 'HR',
+    tasks: [
+      {
+        title: 'Set up payroll',
+        description: 'Add the new employee to the payroll system.',
+        status: 'Draft',
+        priority: 'High',
+        assigneeIds: [],
+        dueDate: null,
+        labels: ['Onboarding', 'Admin'],
+        checklist: [],
+        attachments: [],
+        dependencies: [],
+      },
+      {
+        title: 'Uniform fitting',
+        description: 'Arrange for the new employee to be fitted for their uniform.',
+        status: 'Draft',
+        priority: 'Medium',
+        assigneeIds: [],
+        dueDate: null,
+        labels: ['Onboarding'],
+        checklist: [],
+        attachments: [],
+        dependencies: [],
+      },
+    ],
+  },
+  {
+    id: 'tpl-2',
+    name: 'Restaurant Opening Checklist',
+    description: 'Daily tasks to be completed before opening the restaurant to the public.',
+    category: 'Operations',
+    tasks: [
+       {
+        title: 'Check and restock all stations',
+        description: '',
+        status: 'Draft',
+        priority: 'High',
+        assigneeIds: [],
+        dueDate: null,
+        labels: ['Opening'],
+        checklist: [],
+        attachments: [],
+        dependencies: [],
+      },
+      {
+        title: 'Set tables',
+        description: '',
+        status: 'Draft',
+        priority: 'Medium',
+        assigneeIds: [],
+        dueDate: null,
+        labels: ['Opening', 'FOH'],
+        checklist: [],
+        attachments: [],
+        dependencies: [],
+      },
+    ],
+  },
+   {
+    id: 'tpl-3',
+    name: 'Kitchen Closing Checklist',
+    description: 'End-of-day cleaning and prep tasks for the kitchen.',
+    category: 'Operations',
+    tasks: [
+       {
+        title: 'Deep clean grill station',
+        description: '',
+        status: 'Draft',
+        priority: 'Medium',
+        assigneeIds: [],
+        dueDate: null,
+        labels: ['Closing', 'BOH'],
+        checklist: [],
+        attachments: [],
+        dependencies: [],
+      },
+    ],
+  },
+];
