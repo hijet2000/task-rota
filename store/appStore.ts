@@ -10,13 +10,13 @@
 // - Data is not persisted in localStorage and is not shared between users.
 
 import { create } from 'zustand';
-import { Task, Project, ChecklistItem, Employee, Shift, Location, RoleDefinition, Workspace, CommentLog } from '../types.ts';
-import { fetchAllData } from '../services/dataService.ts';
-import { getPermissions } from '../lib/permissions.ts';
+import { Task, Project, ChecklistItem, Employee, Shift, Location, RoleDefinition, Workspace, CommentLog } from '../types';
+import { fetchAllData } from '../services/dataService';
 
 interface AppState {
   // State
   isLoading: boolean;
+  error: string | null;
   tasks: Task[];
   projects: Project[];
   workspaces: Workspace[];
@@ -24,6 +24,7 @@ interface AppState {
   shifts: Shift[];
   locations: Location[];
   roles: RoleDefinition[];
+  currentUser: Employee | null;
 
   // Actions
   fetchInitialData: () => Promise<void>;
@@ -35,12 +36,13 @@ interface AppState {
   addChecklistItem: (taskId: string, text: string) => void;
   updateChecklistItem: (taskId: string, itemId: string, updates: Partial<ChecklistItem>) => void;
   deleteChecklistItem: (taskId: string, itemId: string) => void;
+  updateRoles: (roles: RoleDefinition[]) => void;
 }
 
-// FIX: Added `get` to the create callback parameters to fix "Cannot find name 'get'" error.
 export const useAppStore = create<AppState>((set, get) => ({
   // Initial State
   isLoading: true,
+  error: null,
   tasks: [],
   projects: [],
   workspaces: [],
@@ -48,26 +50,39 @@ export const useAppStore = create<AppState>((set, get) => ({
   shifts: [],
   locations: [],
   roles: [],
+  currentUser: null,
   
   // Actions
   fetchInitialData: async () => {
     if (!get().isLoading && get().tasks.length > 0) return; // Prevent re-fetching
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
     try {
         const data = await fetchAllData();
+
+        // Defensive sanitization: Ensure all shift dates are Date objects.
+        // This prevents render-time crashes if the data source returns strings.
+        const sanitizedShifts = data.shifts.map(shift => ({
+            ...shift,
+            startTime: shift.startTime instanceof Date ? shift.startTime : new Date(shift.startTime),
+            endTime: shift.endTime instanceof Date ? shift.endTime : new Date(shift.endTime),
+        }));
+
+        // DEMO ONLY: Set a hardcoded current user after fetching all users.
+        const currentUser = data.employees.find(e => e.id === 9) || null; // Elaine Benes (Manager)
         set({
             tasks: data.tasks,
             projects: data.projects,
             workspaces: data.workspaces,
             employees: data.employees,
-            shifts: data.shifts,
+            shifts: sanitizedShifts,
             locations: data.locations,
             roles: data.roles,
+            currentUser: currentUser,
             isLoading: false
         });
     } catch (error) {
         console.error("Failed to fetch initial data", error);
-        set({ isLoading: false });
+        set({ isLoading: false, error: 'Failed to load application data. Please check your connection and try again.' });
     }
   },
 
@@ -100,7 +115,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     });
   },
   addComment: (taskId, text) => {
-    const { currentUser } = getPermissions();
+    const currentUser = get().currentUser;
     if (!currentUser) return;
 
     const newComment: CommentLog = {
@@ -123,7 +138,6 @@ export const useAppStore = create<AppState>((set, get) => ({
       }),
     }));
   },
-  // FIX: Added commas between method definitions and removed extra parentheses to fix syntax errors.
   addDependencies: (taskId, dependencyIds) => {
     console.log(`[MockAPI] Adding dependencies to ${taskId}:`, dependencyIds);
     set((state) => ({
@@ -176,4 +190,8 @@ export const useAppStore = create<AppState>((set, get) => ({
           return task;
       }),
   })),
+  updateRoles: (newRoles) => {
+    console.log('[MockAPI] Updating role definitions');
+    set({ roles: newRoles });
+  },
 }));

@@ -1,7 +1,7 @@
 
+
 import React from 'react';
-// FIX: Added .tsx extension to import path
-import { Modal, Button } from './ui.tsx';
+import { Modal, Button } from './ui';
 
 interface AutomationLogsModalProps {
     isOpen: boolean;

@@ -1,12 +1,9 @@
+
 import React from 'react';
-// FIX: Added .ts extension to import path
-import { Task } from '../types.ts';
-// FIX: Added .ts extension to import path
-import { employees } from '../data/mockData.ts';
-// FIX: Added .tsx extension to import path
-import { Flag, Paperclip, LinkIcon } from './icons.tsx';
-// FIX: Added .tsx extension to import path
-import { SlaBadge } from './SlaBadge.tsx';
+import { Task } from '../types';
+import { employees } from '../data/mockData';
+import { Flag, Paperclip, LinkIcon } from './icons';
+import { SlaBadge } from './SlaBadge';
 
 interface TaskCardProps {
   task: Task;
@@ -38,14 +35,15 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onClick, isSelected, o
       className={`relative w-full text-left bg-white rounded-md shadow-sm p-3 border hover:shadow-md transition-all group ${isSelected ? 'border-blue-500 ring-2 ring-blue-500' : 'border-gray-200 hover:border-blue-500'}`}
     >
         {onSelectToggle && (
-            <div className="absolute top-2 right-2 z-10" onClick={handleCheckboxClick}>
-                <input
-                    type="checkbox"
-                    readOnly
-                    checked={!!isSelected}
-                    className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                />
-            </div>
+            <label onClick={handleCheckboxClick} className="absolute top-1 right-1 z-10 p-2 cursor-pointer">
+              <span className="sr-only">Select task {task.title}</span>
+              <input
+                  type="checkbox"
+                  readOnly
+                  checked={!!isSelected}
+                  className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 pointer-events-none"
+              />
+            </label>
         )}
       <div className="flex justify-between items-start mb-2">
         <p className="font-semibold text-sm text-gray-800 group-hover:text-blue-600 pr-8">{task.title}</p>

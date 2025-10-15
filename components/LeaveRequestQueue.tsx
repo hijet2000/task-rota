@@ -1,13 +1,9 @@
 
 
-
 import React from 'react';
-// FIX: Corrected relative import path for types.ts.
-import { LeaveRequest } from '../types.ts';
-// FIX: Corrected relative import path for mockData.ts.
-import { employees } from '../data/mockData.ts';
-// FIX: Corrected relative import path for ui.tsx.
-import { Button } from './ui.tsx';
+import { LeaveRequest } from '../types';
+import { employees } from '../data/mockData';
+import { Button } from './ui';
 
 interface LeaveRequestQueueProps {
     requests: LeaveRequest[];

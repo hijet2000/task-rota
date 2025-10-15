@@ -1,11 +1,10 @@
 
 
 
+
 import React from 'react';
-// FIX: Corrected relative import path for ui.tsx.
-import { Card, Button } from '../ui.tsx';
-// FIX: Corrected relative import path for icons.tsx.
-import { DownloadCloudIcon, UploadCloudIcon } from '../icons.tsx';
+import { Card, Button } from '../ui';
+import { DownloadCloudIcon, UploadCloudIcon } from '../icons';
 
 export const ImportExportSettings: React.FC = () => {
   return (

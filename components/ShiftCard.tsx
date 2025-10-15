@@ -1,20 +1,23 @@
-
-
-
 import React from 'react';
-// FIX: Corrected relative import path for types.ts.
-import { Shift, Employee } from '../types.ts';
-// FIX: Added .tsx extension to import path
-// Fix: Corrected import paths to be relative and without file extensions.
-import { ClockIcon, UserIcon } from './icons.tsx';
+import { Shift, Employee } from '../types';
+import { ClockIcon, UserIcon } from './icons';
 
 interface ShiftCardProps {
     shift: Shift;
     employee?: Employee | null;
 }
 
+// Helper to ensure value is a Date object, preventing crashes if a date string is passed.
+const ensureDate = (value: Date | string): Date => {
+    if (value instanceof Date) return value;
+    return new Date(value);
+};
+
 export const ShiftCard: React.FC<ShiftCardProps> = ({ shift, employee }) => {
     const formatTime = (date: Date) => date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+
+    const startTime = ensureDate(shift.startTime);
+    const endTime = ensureDate(shift.endTime);
 
     return (
         <div 
@@ -24,7 +27,7 @@ export const ShiftCard: React.FC<ShiftCardProps> = ({ shift, employee }) => {
             <p className="font-bold" style={{ color: shift.color }}>{shift.role}</p>
             <div className="flex items-center my-1 text-gray-700">
                 <ClockIcon className="w-3 h-3 mr-1" />
-                <span>{formatTime(shift.startTime)} - {formatTime(shift.endTime)}</span>
+                <span>{formatTime(startTime)} - {formatTime(endTime)}</span>
             </div>
             {employee ? (
                  <div className="flex items-center text-gray-600">

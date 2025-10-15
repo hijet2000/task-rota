@@ -1,9 +1,9 @@
 import React from 'react';
-import { CurrentPlanCard } from './billing/CurrentPlanCard.tsx';
-import { PlanCard } from './billing/PlanCard.tsx';
-import { BillingHistoryTable } from './billing/BillingHistoryTable.tsx';
-import { plans as allPlans } from '../data/plans.ts';
-import { useFeatures } from '../lib/features.ts';
+import { CurrentPlanCard } from './billing/CurrentPlanCard';
+import { PlanCard } from './billing/PlanCard';
+import { BillingHistoryTable } from './billing/BillingHistoryTable';
+import { plans as allPlans } from '../data/plans';
+import { useFeatures } from '../lib/features';
 
 export const SubscriptionPage: React.FC = () => {
     const { planId } = useFeatures();

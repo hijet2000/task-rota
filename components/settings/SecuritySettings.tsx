@@ -1,13 +1,11 @@
 
 
 
+
 import React, { useState } from 'react';
-// FIX: Corrected relative import path for ui.tsx.
-import { Card, Button, ToggleSwitch, Input } from '../ui.tsx';
-// FIX: Corrected relative import path for devices.ts.
-import { devices } from '../../data/devices.ts';
-// FIX: Corrected relative import path for types.ts.
-import { Device } from '../../types.ts';
+import { Card, Button, ToggleSwitch, Input } from '../ui';
+import { devices } from '../../data/devices';
+import { Device } from '../../types';
 
 export const SecuritySettings: React.FC = () => {
   const [mfa, setMfa] = useState(true);

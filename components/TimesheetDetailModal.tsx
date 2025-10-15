@@ -1,11 +1,8 @@
 
 
-
 import React from 'react';
-// FIX: Corrected relative import path for ui.tsx.
-import { Modal, Button } from './ui.tsx';
-// FIX: Corrected relative import path for types.ts.
-import { Timesheet } from '../types.ts';
+import { Modal, Button } from './ui';
+import { Timesheet } from '../types';
 
 interface TimesheetDetailModalProps {
     isOpen: boolean;

@@ -1,6 +1,6 @@
 import React from 'react';
-import { ShieldAlertIcon } from '../icons.tsx';
-import { Button } from '../ui.tsx';
+import { ShieldAlertIcon } from '../icons';
+import { Button } from '../ui';
 
 interface FeatureDisabledProps {
     pageTitle?: string;

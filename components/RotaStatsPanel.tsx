@@ -1,21 +1,23 @@
-
-
-
-// FIX: Implemented the missing RotaStatsPanel component.
 import React from 'react';
-// FIX: Corrected relative import path for types.ts.
-import { Shift, Employee } from '../types.ts';
-// FIX: Corrected relative import path for icons.tsx.
-import { BarChart2Icon } from './icons.tsx';
+import { Shift, Employee } from '../types';
+import { BarChart2Icon } from './icons';
 
 interface RotaStatsPanelProps {
     shifts: Shift[];
     employees: Employee[];
 }
 
+// Helper to ensure value is a Date object, preventing crashes if a date string is passed.
+const ensureDate = (value: Date | string): Date => {
+    if (value instanceof Date) return value;
+    return new Date(value);
+};
+
 export const RotaStatsPanel: React.FC<RotaStatsPanelProps> = ({ shifts, employees }) => {
     const totalHours = shifts.reduce((acc, shift) => {
-        const duration = (shift.endTime.getTime() - shift.startTime.getTime()) / (1000 * 60 * 60);
+        const startTime = ensureDate(shift.startTime);
+        const endTime = ensureDate(shift.endTime);
+        const duration = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
         const paidHours = duration - (shift.unpaidBreakMinutes / 60);
         return acc + paidHours;
     }, 0);
@@ -24,7 +26,9 @@ export const RotaStatsPanel: React.FC<RotaStatsPanelProps> = ({ shifts, employee
         const employee = employees.find(e => e.id === shift.employeeId);
         if (!employee) return acc;
 
-        const duration = (shift.endTime.getTime() - shift.startTime.getTime()) / (1000 * 60 * 60);
+        const startTime = ensureDate(shift.startTime);
+        const endTime = ensureDate(shift.endTime);
+        const duration = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
         const paidHours = duration - (shift.unpaidBreakMinutes / 60);
         
         if (employee.payType === 'hourly' && employee.hourlyRate) {

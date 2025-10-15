@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-// FIX: Added .tsx extension to import path
-import { Modal, Input } from './ui.tsx';
+import { Modal, Input } from './ui';
 
 interface SearchResultsModalProps {
     isOpen: boolean;

@@ -1,14 +1,14 @@
 import React, { useState, useMemo } from 'react';
-import { Task } from '../types.ts';
-import { employees } from '../data/mockData.ts';
-import { projects } from '../data/projectData.ts';
-import { SlaBadge } from './SlaBadge.tsx';
-import { Button, Select, Input, TagInput } from './ui.tsx';
-import { Paperclip, MessageSquareIcon, Flag, CalendarIcon, UserIcon, FolderIcon, PlusIcon, CheckCircleIcon, XCircleIcon, TrashIcon } from './icons.tsx';
-import { useAppStore } from '../store/appStore.ts';
-import { AddRelatedTaskModal } from './AddRelatedTaskModal.tsx';
-import { QuickAddTaskModal } from './QuickAddTaskModal.tsx';
-import { getPermissions } from '../lib/permissions.ts';
+import { Task } from '../types';
+import { employees } from '../data/mockData';
+import { projects } from '../data/projectData';
+import { SlaBadge } from './SlaBadge';
+import { Button, Select, Input, TagInput } from './ui';
+import { Paperclip, MessageSquareIcon, Flag, CalendarIcon, UserIcon, FolderIcon, PlusIcon, CheckCircleIcon, XCircleIcon, TrashIcon } from './icons';
+import { useAppStore } from '../store/appStore';
+import { AddRelatedTaskModal } from './AddRelatedTaskModal';
+import { QuickAddTaskModal } from './QuickAddTaskModal';
+import { usePermissions } from '../hooks/usePermissions';
 
 interface TaskDetailViewProps {
     task: Task;
@@ -138,7 +138,7 @@ export const TaskDetailView: React.FC<TaskDetailViewProps> = ({ task, onClose })
         addComment: state.addComment,
     }));
     
-    const { currentUser } = getPermissions();
+    const { currentUser } = usePermissions();
     const [isAddRelatedOpen, setIsAddRelatedOpen] = useState(false);
     const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
     const [commentText, setCommentText] = useState('');

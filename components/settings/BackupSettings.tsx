@@ -1,13 +1,11 @@
 
 
 
+
 import React from 'react';
-// FIX: Corrected relative import path for ui.tsx.
-import { Card, Select, Button } from '../ui.tsx';
-// FIX: Corrected relative import path for icons.tsx.
-import { HardDriveIcon, ServerIcon, CheckCircleIcon, XCircleIcon } from '../icons.tsx';
-// FIX: Corrected relative import path for backups.ts.
-import { backups } from '../../data/backups.ts';
+import { Card, Select, Button } from '../ui';
+import { HardDriveIcon, ServerIcon, CheckCircleIcon, XCircleIcon } from '../icons';
+import { backups } from '../../data/backups';
 
 export const BackupSettings: React.FC = () => {
   return (

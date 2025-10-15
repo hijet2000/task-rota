@@ -1,8 +1,6 @@
 import React from 'react';
-// FIX: Added .tsx extension to import path
-import { Modal, Button, Input, Select } from './ui.tsx';
-// FIX: Added .ts extension to import path
-import { employees } from '../data/mockData.ts';
+import { Modal, Button, Input, Select } from './ui';
+import { employees } from '../data/mockData';
 
 interface RequestLeaveModalProps {
     isOpen: boolean;

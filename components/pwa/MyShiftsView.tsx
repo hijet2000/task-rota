@@ -1,10 +1,10 @@
 import React from 'react';
-import { shifts } from '../../data/mockData.ts';
-import { getPermissions } from '../../lib/permissions.ts';
-import { locations } from '../../data/locations.ts';
+import { shifts } from '../../data/mockData';
+import { usePermissions } from '../../hooks/usePermissions';
+import { locations } from '../../data/locations';
 
 export const MyShiftsView: React.FC = () => {
-    const { currentUser } = getPermissions();
+    const { currentUser } = usePermissions();
     const myShifts = currentUser ? shifts.filter(s => s.employeeId === currentUser.id) : [];
 
     const formatTime = (date: Date) => date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });

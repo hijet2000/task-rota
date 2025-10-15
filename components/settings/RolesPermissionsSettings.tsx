@@ -1,29 +1,22 @@
 
 
 
+
+
 import React, { useState, useEffect } from 'react';
-// FIX: Corrected relative import path for ui.tsx.
-import { Card, Button } from '../ui.tsx';
-// FIX: Corrected relative import path for roles.ts.
-import { initialRoleDefinitions } from '../../data/roles.ts';
-// FIX: Corrected relative import path for types.ts.
-import { RoleDefinition } from '../../types.ts';
-// FIX: Corrected relative import path for permissions.ts.
-import { updateRoleDefinitions } from '../../lib/permissions.ts';
-// FIX: Corrected relative import path for RoleEditorModal.tsx.
-import { RoleEditorModal } from './RoleEditorModal.tsx';
-// FIX: Corrected relative import path for icons.tsx.
-import { PencilIcon, TrashIcon } from '../icons.tsx';
+import { Card, Button } from '../ui';
+import { RoleDefinition } from '../../types';
+import { RoleEditorModal } from './RoleEditorModal';
+import { PencilIcon, TrashIcon } from '../icons';
+import { useAppStore } from '../../store/appStore';
 
 export const RolesPermissionsSettings: React.FC = () => {
-    const [roles, setRoles] = useState<RoleDefinition[]>(initialRoleDefinitions);
+    const { roles, updateRoles } = useAppStore(state => ({
+        roles: state.roles,
+        updateRoles: state.updateRoles,
+    }));
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedRole, setSelectedRole] = useState<RoleDefinition | null>(null);
-
-    // Update the central permissions "store" whenever roles change
-    useEffect(() => {
-        updateRoleDefinitions(roles);
-    }, [roles]);
 
     const handleAddRole = () => {
         setSelectedRole(null);
@@ -37,21 +30,23 @@ export const RolesPermissionsSettings: React.FC = () => {
 
     const handleDeleteRole = (roleName: string) => {
         if (window.confirm(`Are you sure you want to delete the "${roleName}" role? This cannot be undone.`)) {
-            setRoles(prevRoles => prevRoles.filter(r => r.name !== roleName));
+            const newRoles = roles.filter(r => r.name !== roleName);
+            updateRoles(newRoles);
         }
     };
 
     const handleSaveRole = (roleToSave: RoleDefinition) => {
-        setRoles(prevRoles => {
-            const roleExists = prevRoles.some(r => r.name === selectedRole?.name);
-            if (roleExists && selectedRole) {
-                // Update existing role
-                return prevRoles.map(r => r.name === selectedRole!.name ? roleToSave : r);
-            } else {
-                // Add new role
-                return [...prevRoles, roleToSave];
-            }
-        });
+        let newRoles: RoleDefinition[];
+        const roleExists = roles.some(r => r.name === selectedRole?.name);
+
+        if (roleExists && selectedRole) {
+            // Update existing role
+            newRoles = roles.map(r => r.name === selectedRole!.name ? roleToSave : r);
+        } else {
+            // Add new role
+            newRoles = [...roles, roleToSave];
+        }
+        updateRoles(newRoles);
         setIsModalOpen(false);
     };
 

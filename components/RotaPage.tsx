@@ -1,11 +1,12 @@
 
+
 import React, { useState, useMemo } from 'react';
-import { RotaGrid } from './RotaGrid.tsx';
-import { RotaStatsPanel } from './RotaStatsPanel.tsx';
-import { useRotaSchedule } from '../hooks/useRotaSchedule.ts';
-import { Button, Select } from './ui.tsx';
-import { getPermissions } from '../lib/permissions.ts';
-import { useAppStore } from '../store/appStore.ts';
+import { RotaGrid } from './RotaGrid';
+import { RotaStatsPanel } from './RotaStatsPanel';
+import { useRotaSchedule } from '../hooks/useRotaSchedule';
+import { Button, Select } from './ui';
+import { usePermissions } from '../hooks/usePermissions';
+import { useAppStore } from '../store/appStore';
 
 export const RotaPage: React.FC = () => {
     const { employees, shifts, locations } = useAppStore(state => ({
@@ -13,7 +14,7 @@ export const RotaPage: React.FC = () => {
         shifts: state.shifts,
         locations: state.locations,
     }));
-    const { hasPermission } = getPermissions();
+    const { hasPermission } = usePermissions();
     const {
         weekDates,
         shiftsForWeek: allShiftsForWeek,

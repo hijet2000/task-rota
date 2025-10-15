@@ -1,10 +1,11 @@
 
+
 import React from 'react';
-import { getPermissions } from '../../lib/permissions.ts';
-import PermissionDenied from '../PermissionDenied.tsx';
-import { FeatureId } from '../../types.ts';
-import { useFeatures } from '../../lib/features.ts';
-import FeatureDisabled from './FeatureDisabled.tsx';
+import { usePermissions } from '../../hooks/usePermissions';
+import PermissionDenied from '../PermissionDenied';
+import { FeatureId } from '../../types';
+import { useFeatures } from '../../lib/features';
+import FeatureDisabled from './FeatureDisabled';
 
 interface ProtectedPageProps {
   permission: string | string[] | null; // Allow null for public pages
@@ -14,7 +15,7 @@ interface ProtectedPageProps {
 }
 
 export const ProtectedPage: React.FC<ProtectedPageProps> = ({ permission, feature, pageTitle, children }) => {
-  const { hasPermission } = getPermissions();
+  const { hasPermission } = usePermissions();
   const { hasFeature } = useFeatures();
 
   if (feature && !hasFeature(feature)) {

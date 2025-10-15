@@ -1,14 +1,10 @@
 
 
-
 // FIX: Implemented the missing PayrollExportModal component.
 import React from 'react';
-// FIX: Corrected relative import path for ui.tsx.
-import { Modal, Button, Select } from './ui.tsx';
-// FIX: Corrected relative import path for types.ts.
-import { Timesheet } from '../types.ts';
-// FIX: Corrected relative import path for icons.tsx.
-import { DownloadCloudIcon } from './icons.tsx';
+import { Modal, Button, Select } from './ui';
+import { Timesheet } from '../types';
+import { DownloadCloudIcon } from './icons';
 
 interface PayrollExportModalProps {
     isOpen: boolean;

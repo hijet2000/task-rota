@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-// FIX: Corrected relative import path for types.ts.
-import { Employee, DailyAvailability } from '../types.ts';
-// FIX: Corrected relative import path for ui.tsx.
-import { Modal, Button } from './ui.tsx';
-// FIX: Corrected relative import path for AvailabilityEditor.tsx.
-import { AvailabilityEditor } from './AvailabilityEditor.tsx';
+import { Employee, DailyAvailability } from '../types';
+import { Modal, Button } from './ui';
+import { AvailabilityEditor } from './AvailabilityEditor';
 
 interface AvailabilityModalProps {
     isOpen: boolean;

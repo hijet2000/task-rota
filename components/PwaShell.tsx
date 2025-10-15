@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { getPermissions } from '../lib/permissions.ts';
-import { HomeView } from './pwa/HomeView.tsx';
-import { MyShiftsView } from './pwa/MyShiftsView.tsx';
-import { MyTasksView } from './pwa/MyTasksView.tsx';
-import { AvailabilityView } from './pwa/AvailabilityView.tsx';
-import { InboxView } from './pwa/MessagesView.tsx';
-import { ApprovalsView } from './pwa/ApprovalsView.tsx';
-import { LeaveView } from './pwa/LeaveView.tsx';
-import { HomeIcon, BriefcaseIcon, FileCheck2Icon, CalendarIcon, BellIcon, ShieldCheckIcon, ClockIcon } from './icons.tsx';
+import { usePermissions } from '../hooks/usePermissions';
+import { HomeView } from './pwa/HomeView';
+import { MyShiftsView } from './pwa/MyShiftsView';
+import { MyTasksView } from './pwa/MyTasksView';
+import { AvailabilityView } from './pwa/AvailabilityView';
+import { InboxView } from './pwa/MessagesView';
+import { ApprovalsView } from './pwa/ApprovalsView';
+import { LeaveView } from './pwa/LeaveView';
+import { HomeIcon, BriefcaseIcon, FileCheck2Icon, CalendarIcon, BellIcon, ShieldCheckIcon, ClockIcon } from './icons';
 
 type PwaView = 'Home' | 'MyShifts' | 'MyTasks' | 'Availability' | 'Leave' | 'Approvals' | 'Inbox';
 
@@ -31,7 +31,7 @@ const NavItem: React.FC<{
 };
 
 export const PwaShell: React.FC = () => {
-    const { currentUser, hasPermission } = getPermissions();
+    const { currentUser, hasPermission } = usePermissions();
     const [activeView, setActiveView] = useState<PwaView>('Home');
 
     const renderContent = () => {

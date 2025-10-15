@@ -1,17 +1,14 @@
 
+
 import React from 'react';
-// FIX: Corrected relative import path for ClockInPanel.tsx.
-import { ClockInPanel } from './ClockInPanel.tsx';
-// FIX: Corrected relative import path for PhotoReviewQueue.tsx.
-import { PhotoReviewQueue } from './PhotoReviewQueue.tsx';
-// FIX: Corrected relative import path for QrClockIn.tsx.
-import { QrClockIn } from './QrClockIn.tsx';
-// FIX: Corrected relative import path for timeClockEntries.ts.
-import { timeClockEntries } from '../data/timeClockEntries.ts';
-import { getPermissions } from '../lib/permissions.ts';
+import { ClockInPanel } from './ClockInPanel';
+import { PhotoReviewQueue } from './PhotoReviewQueue';
+import { QrClockIn } from './QrClockIn';
+import { timeClockEntries } from '../data/timeClockEntries';
+import { usePermissions } from '../hooks/usePermissions';
 
 export const TimeClockPage: React.FC = () => {
-    const { hasPermission } = getPermissions();
+    const { hasPermission } = usePermissions();
     const canReviewPhotos = hasPermission('approve_timesheets');
     const photosToReview = timeClockEntries.filter(e => e.photoUrl && !e.isVerified);
 

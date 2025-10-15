@@ -1,14 +1,15 @@
 
+
 import React, { useState, useMemo } from 'react';
-import { Project } from '../types.ts';
-import { ProjectCard } from './ProjectCard.tsx';
-import { ProjectFormModal } from './ProjectFormModal.tsx';
-import { Button } from './ui.tsx';
-import { getPermissions } from '../lib/permissions.ts';
-import { useAppStore } from '../store/appStore.ts';
+import { Project } from '../types';
+import { ProjectCard } from './ProjectCard';
+import { ProjectFormModal } from './ProjectFormModal';
+import { Button } from './ui';
+import { usePermissions } from '../hooks/usePermissions';
+import { useAppStore } from '../store/appStore';
 
 export const ProjectsPage: React.FC = () => {
-    const { hasPermission } = getPermissions();
+    const { hasPermission } = usePermissions();
     const { projects, workspaces } = useAppStore(state => ({
         projects: state.projects,
         workspaces: state.workspaces,

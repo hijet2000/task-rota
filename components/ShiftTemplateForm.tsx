@@ -1,7 +1,7 @@
 // FIX: Implemented ShiftTemplateForm component
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Input } from './ui.tsx';
-import { TaskTemplate, Task } from '../types.ts';
+import { Modal, Button, Input } from './ui';
+import { TaskTemplate, Task } from '../types';
 
 interface TemplateEditorModalProps {
     isOpen: boolean;

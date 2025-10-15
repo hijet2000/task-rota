@@ -1,111 +1,112 @@
-import React, { useState, useRef, useEffect } from 'react';
-// FIX: Added .tsx extension to import path
-import { Button } from '../ui.tsx';
-// FIX: Added .tsx extension to import path
-import { CameraIcon, MicIcon, TrashIcon } from '../icons.tsx';
+import React, { useState, useRef } from 'react';
+import { Button } from '../ui';
+import { CameraIcon, MicIcon, TrashIcon } from '../icons';
 
 export const QuickAddWidget: React.FC = () => {
     const [text, setText] = useState('');
     const [photo, setPhoto] = useState<string | null>(null);
     const [isRecording, setIsRecording] = useState(false);
     const [voiceNote, setVoiceNote] = useState<Blob | null>(null);
-    const [status, setStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+    const [status, setStatus] = useState<'idle' | 'submitting' | 'submitted'>('idle');
+    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+    const photoInputRef = useRef<HTMLInputElement>(null);
 
-    const mediaRecorder = useRef<MediaRecorder | null>(null);
-    const audioChunks = useRef<Blob[]>([]);
-
-    const handlePhotoCapture = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files[0]) {
+    const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
             const reader = new FileReader();
-            reader.onload = (e) => setPhoto(e.target.result as string);
-            reader.readAsDataURL(event.target.files[0]);
+            reader.onload = (event) => {
+                setPhoto(event.target?.result as string);
+            };
+            reader.readAsDataURL(e.target.files[0]);
         }
     };
 
-    const handleRecord = async () => {
+    const handleMicClick = () => {
         if (isRecording) {
-            mediaRecorder.current?.stop();
-            setIsRecording(false);
+            mediaRecorderRef.current?.stop();
         } else {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder.current = new MediaRecorder(stream);
-                mediaRecorder.current.ondataavailable = (event) => {
-                    audioChunks.current.push(event.data);
-                };
-                mediaRecorder.current.onstop = () => {
-                    const audioBlob = new Blob(audioChunks.current, { type: 'audio/webm' });
-                    setVoiceNote(audioBlob);
-                    audioChunks.current = [];
-                    stream.getTracks().forEach(track => track.stop());
-                };
-                mediaRecorder.current.start();
-                setIsRecording(true);
-            } catch (err) {
-                console.error("Microphone access denied:", err);
-                alert("Microphone access is needed to record a voice note.");
-            }
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    const mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorderRef.current = mediaRecorder;
+                    mediaRecorder.start();
+                    setIsRecording(true);
+
+                    const audioChunks: Blob[] = [];
+                    mediaRecorder.addEventListener("dataavailable", event => {
+                        audioChunks.push(event.data);
+                    });
+
+                    mediaRecorder.addEventListener("stop", () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        setVoiceNote(audioBlob);
+                        setIsRecording(false);
+                        stream.getTracks().forEach(track => track.stop()); // Stop microphone
+                    });
+                })
+                .catch(err => {
+                    console.error("Error accessing microphone:", err);
+                    alert("Could not access the microphone. Please check permissions.");
+                });
         }
     };
 
-    const handleAddTask = () => {
-        if (!text && !photo && !voiceNote) return;
-        setStatus('saving');
+    const handleSubmit = () => {
+        if (!text.trim() && !photo && !voiceNote) return;
 
-        const newTask = {
-            id: `offline_${Date.now()}`,
-            title: text.split('\n')[0] || 'New Offline Task',
-            description: text,
-            photo, // base64 string
-            // In a real app, you would handle the blob data for upload
-            voiceNoteUrl: voiceNote ? URL.createObjectURL(voiceNote) : null,
-            createdAt: new Date().toISOString(),
-        };
-
-        // Save to localStorage for offline persistence
-        const offlineTasks = JSON.parse(localStorage.getItem('offlineTasks') || '[]');
-        offlineTasks.push(newTask);
-        localStorage.setItem('offlineTasks', JSON.stringify(offlineTasks));
-
+        setStatus('submitting');
+        console.log("Submitting quick add:", { text, photo: !!photo, voiceNote: !!voiceNote });
         setTimeout(() => {
-            setStatus('saved');
-            setText('');
-            setPhoto(null);
-            setVoiceNote(null);
-            setTimeout(() => setStatus('idle'), 1500);
-        }, 500);
+            setStatus('submitted');
+            setTimeout(() => {
+                setText('');
+                setPhoto(null);
+                setVoiceNote(null);
+                setStatus('idle');
+            }, 1500);
+        }, 1000);
     };
+
+    const hasContent = !!(text.trim() || photo || voiceNote);
 
     return (
         <div className="bg-white p-4 rounded-lg shadow-md">
-            <h3 className="font-bold text-lg mb-2">Offline Quick Add</h3>
+            <h3 className="font-bold text-lg mb-2">Quick Add Task</h3>
             <textarea
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                className="w-full border-gray-300 rounded-md shadow-sm p-2 text-sm"
+                className="w-full border-gray-300 rounded-md shadow-sm p-2"
                 rows={3}
-                placeholder="Type a task, add a photo, or record a voice note... (transcribed on sync)"
+                placeholder="Type a task, add a photo, or record a voice note..."
+                value={text}
+                onChange={e => setText(e.target.value)}
             />
-            {photo && <img src={photo} alt="Captured" className="mt-2 rounded-md max-h-40" />}
-            {voiceNote && <audio src={URL.createObjectURL(voiceNote)} controls className="mt-2 w-full" />}
-            
-            <div className="mt-2 flex justify-between items-center">
-                <div className="flex items-center space-x-2">
-                    <label className="cursor-pointer p-2 rounded-full hover:bg-gray-100">
-                        <CameraIcon className="w-6 h-6 text-gray-600" />
-                        <input type="file" accept="image/*" capture className="hidden" onChange={handlePhotoCapture} />
-                    </label>
-                    <button onClick={handleRecord} className={`p-2 rounded-full hover:bg-gray-100 ${isRecording ? 'bg-red-100' : ''}`}>
-                        <MicIcon className={`w-6 h-6 ${isRecording ? 'text-red-600' : 'text-gray-600'}`} />
+            {photo && (
+                <div className="relative mt-2">
+                    <img src={photo} alt="Task attachment" className="rounded-lg w-full" />
+                    <button onClick={() => setPhoto(null)} className="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full p-1" aria-label="Remove photo">
+                        <TrashIcon className="w-4 h-4" />
                     </button>
-                    {(photo || voiceNote) && (
-                        <button onClick={() => { setPhoto(null); setVoiceNote(null); }} className="p-2 rounded-full hover:bg-gray-100">
-                            <TrashIcon className="w-6 h-6 text-red-500" />
-                        </button>
-                    )}
                 </div>
-                <Button onClick={handleAddTask} disabled={status !== 'idle'}>
-                    {status === 'saving' ? 'Saving...' : status === 'saved' ? 'Saved!' : 'Add Task'}
+            )}
+            {voiceNote && (
+                <div className="mt-2 flex items-center space-x-2">
+                    <audio src={URL.createObjectURL(voiceNote)} controls className="w-full" />
+                    <button onClick={() => setVoiceNote(null)} className="text-gray-500 p-1" aria-label="Remove voice note">
+                        <TrashIcon className="w-5 h-5" />
+                    </button>
+                </div>
+            )}
+            <div className="mt-2 flex justify-between items-center">
+                <div className="flex space-x-2">
+                    <input type="file" accept="image/*" capture="environment" ref={photoInputRef} onChange={handlePhotoChange} className="hidden" />
+                    <Button variant="secondary" size="sm" onClick={() => photoInputRef.current?.click()}>
+                        <CameraIcon className="w-4 h-4 mr-1" /> Photo
+                    </Button>
+                    <Button variant="secondary" size="sm" onClick={handleMicClick} className={isRecording ? 'bg-red-100 text-red-700' : ''}>
+                        <MicIcon className="w-4 h-4 mr-1" /> {isRecording ? 'Stop' : 'Voice'}
+                    </Button>
+                </div>
+                <Button onClick={handleSubmit} disabled={!hasContent || status !== 'idle'}>
+                    {status === 'submitting' ? 'Saving...' : status === 'submitted' ? 'Saved!' : 'Save Task'}
                 </Button>
             </div>
         </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '../ui.tsx';
-import { CameraIcon, MapPinIcon } from '../icons.tsx';
-import { PermissionGate } from './PermissionGate.tsx';
+import { Button } from '../ui';
+import { CameraIcon, MapPinIcon } from '../icons';
+import { PermissionGate } from './PermissionGate';
 
 export const ClockInView: React.FC = () => {
     const [status, setStatus] = useState<'clocked_out' | 'clocked_in'>('clocked_out');

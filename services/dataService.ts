@@ -51,16 +51,12 @@ export const fetchAllData = async (): Promise<{
     await delay(800); // Simulate network latency
     console.log('[MockAPI Service] Responding to GET /api/v1/all-data');
 
-    // Return a copy of the data to prevent direct mutation of the "database"
-    return JSON.parse(JSON.stringify({
-        employees: mockDatabase.employees,
-        shifts: mockDatabase.shifts,
-        tasks: mockDatabase.tasks,
-        projects: mockDatabase.projects,
-        workspaces: mockDatabase.workspaces,
-        locations: mockDatabase.locations,
-        roles: mockDatabase.roles,
-    }));
+    // Use structuredClone to create a deep copy of the mock data.
+    // This correctly preserves complex types like Date objects, which JSON.stringify does not.
+    // This fixes the root cause of the render loop error.
+    const data = structuredClone(mockDatabase);
+    
+    return data;
 };
 
 /**
@@ -80,5 +76,6 @@ export const updateEmployee = async (employee: Employee): Promise<Employee> => {
         mockDatabase.employees.push(employee);
     }
     
-    return JSON.parse(JSON.stringify(employee));
+    // Use structuredClone to preserve Date objects on the returned data
+    return structuredClone(employee);
 };

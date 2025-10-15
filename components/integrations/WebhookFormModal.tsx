@@ -1,12 +1,8 @@
 
 
-
-
 import React from 'react';
-// FIX: Corrected relative import path for ui.tsx.
-import { Modal, Button, Input, TagInput } from '../ui.tsx';
-// FIX: Corrected relative import path for types.ts.
-import { Webhook } from '../../types.ts';
+import { Modal, Button, Input, TagInput } from '../ui';
+import { Webhook } from '../../types';
 
 interface WebhookFormModalProps {
     isOpen: boolean;

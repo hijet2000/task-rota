@@ -1,15 +1,16 @@
 
+
 import React, { useState } from 'react';
-import { leaveRequests } from '../data/leaveRequests.ts';
-import { blackoutDates } from '../data/blackoutDates.ts';
-import { LeaveRequestQueue } from './LeaveRequestQueue.tsx';
-import { TeamLeaveCalendar } from './TeamLeaveCalendar.tsx';
-import { RequestLeaveModal } from './RequestLeaveModal.tsx';
-import { Button } from './ui.tsx';
-import { getPermissions } from '../lib/permissions.ts';
+import { leaveRequests } from '../data/leaveRequests';
+import { blackoutDates } from '../data/blackoutDates';
+import { LeaveRequestQueue } from './LeaveRequestQueue';
+import { TeamLeaveCalendar } from './TeamLeaveCalendar';
+import { RequestLeaveModal } from './RequestLeaveModal';
+import { Button } from './ui';
+import { usePermissions } from '../hooks/usePermissions';
 
 export const LeavePage: React.FC = () => {
-    const { hasPermission } = getPermissions();
+    const { hasPermission } = usePermissions();
     const canManageLeave = hasPermission('manage_leave');
 
     const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);

@@ -1,6 +1,6 @@
 // FIX: Implement the ComplianceReportModal component.
 import React from 'react';
-import { Modal, Button } from './ui.tsx';
+import { Modal, Button } from './ui';
 
 interface Violation {
     type: 'Working Time' | 'Rest Period' | 'Fair Scheduling';

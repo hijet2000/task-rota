@@ -1,8 +1,8 @@
 import React from 'react';
-import { Input, Select, Button } from './ui.tsx';
-import { employees } from '../data/mockData.ts';
-import { projects } from '../data/projectData.ts';
-import { Task } from '../types.ts';
+import { Input, Select, Button } from './ui';
+import { employees } from '../data/mockData';
+import { projects } from '../data/projectData';
+import { Task } from '../types';
 
 export interface Filters {
     searchTerm: string;

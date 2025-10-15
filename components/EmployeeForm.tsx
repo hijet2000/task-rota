@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Employee } from '../types.ts';
-import { Modal, Button, Input, Select, TagInput } from './ui.tsx';
-import { validateEmployee, ValidationError } from '../lib/validation.ts';
-import { useAppStore } from '../store/appStore.ts';
+import { Employee } from '../types';
+import { Modal, Button, Input, Select, TagInput } from './ui';
+import { validateEmployee, ValidationError } from '../lib/validation';
+import { useAppStore } from '../store/appStore';
 
 interface EmployeeFormProps {
     isOpen: boolean;

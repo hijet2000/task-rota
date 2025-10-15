@@ -1,10 +1,7 @@
 import React from 'react';
-// FIX: Corrected relative import path for ui.tsx.
-import { Card, Button } from '../ui.tsx';
-// FIX: Corrected relative import path for tenants.ts.
-import { tenants } from '../../data/tenants.ts';
-// FIX: Corrected relative import path for icons.tsx.
-import { CheckCircleIcon, AlertCircleIcon } from '../icons.tsx';
+import { Card, Button } from '../ui';
+import { tenants } from '../../data/tenants';
+import { CheckCircleIcon, AlertCircleIcon } from '../icons';
 
 export const TenantList: React.FC = () => {
     const statusColors: Record<string, string> = {

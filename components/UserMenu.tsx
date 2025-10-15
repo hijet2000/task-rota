@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { getPermissions } from '../lib/permissions.ts';
+import { usePermissions } from '../hooks/usePermissions.ts';
 import { LogOutIcon, SettingsIcon, UserIcon } from './icons.tsx';
 
 export const UserMenu: React.FC = () => {
-    const { currentUser } = getPermissions();
+    const { currentUser } = usePermissions();
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 

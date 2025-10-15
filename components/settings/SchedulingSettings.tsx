@@ -1,7 +1,7 @@
 
+
 import React, { useState } from 'react';
-// FIX: Added .tsx extension to import path.
-import { Card, Input, Select, Button, ToggleSwitch } from '../ui.tsx';
+import { Card, Input, Select, Button, ToggleSwitch } from '../ui';
 
 export const SchedulingSettings: React.FC = () => {
     const [openShifts, setOpenShifts] = useState(true);

@@ -1,9 +1,8 @@
+
 import React, { useState } from 'react';
-// FIX: Corrected relative import path for ui.tsx.
-import { Card, Button, Input, ToggleSwitch } from '../ui.tsx';
-// FIX: Corrected relative import path for icons.tsx.
-import { MailIcon, GoogleIcon, MicrosoftIcon, SageIcon, LinkIcon } from '../icons.tsx';
-import { useFeatures } from '../../lib/features.ts';
+import { Card, Button, Input, ToggleSwitch } from '../ui';
+import { MailIcon, GoogleIcon, MicrosoftIcon, SageIcon, LinkIcon } from '../icons';
+import { useFeatures } from '../../lib/features';
 
 export const IntegrationsSettings: React.FC = () => {
   const [useSsl, setUseSsl] = useState(true);

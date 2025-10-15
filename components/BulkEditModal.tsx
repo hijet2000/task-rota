@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-// FIX: Added .tsx extension to import path
-import { Modal, Button, Select, Input } from './ui.tsx';
-// FIX: Added .ts extension to import path
-import { Task } from '../types.ts';
-// FIX: Added .ts extension to import path
-import { employees } from '../data/mockData.ts';
+import { Modal, Button, Select, Input } from './ui';
+import { Task } from '../types';
+import { employees } from '../data/mockData';
 
 interface BulkEditModalProps {
     isOpen: boolean;

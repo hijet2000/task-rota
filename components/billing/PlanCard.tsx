@@ -1,12 +1,9 @@
 
 
 import React from 'react';
-// FIX: Corrected relative import path for ui.tsx.
-import { Button } from '../ui.tsx';
-// FIX: Corrected relative import path for types.ts.
-import { Plan } from '../../types.ts';
-// FIX: Corrected relative import path for icons.tsx.
-import { CheckCircleIcon } from '../icons.tsx';
+import { Button } from '../ui';
+import { Plan } from '../../types';
+import { CheckCircleIcon } from '../icons';
 
 interface PlanCardProps {
     plan: Plan;

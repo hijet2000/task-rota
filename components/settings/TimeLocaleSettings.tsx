@@ -1,8 +1,8 @@
 
 
+
 import React from 'react';
-// FIX: Added .tsx extension to import path
-import { Card, Select, Button } from '../ui.tsx';
+import { Card, Select, Button } from '../ui';
 
 export const TimeLocaleSettings: React.FC = () => {
   return (

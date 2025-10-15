@@ -1,11 +1,12 @@
 
+
+
 import React from 'react';
-// FIX: Corrected relative import path for types.ts.
-import { Project } from '../types.ts';
-import { Button } from './ui.tsx';
-import { employees } from '../data/mockData.ts';
-import { PencilIcon, TrashIcon } from './icons.tsx';
-import { getPermissions } from '../lib/permissions.ts';
+import { Project } from '../types';
+import { Button } from './ui';
+import { employees } from '../data/mockData';
+import { PencilIcon, TrashIcon } from './icons';
+import { usePermissions } from '../hooks/usePermissions';
 
 interface ProjectCardProps {
     project: Project;
@@ -14,7 +15,7 @@ interface ProjectCardProps {
 }
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDelete }) => {
-    const { hasPermission } = getPermissions();
+    const { hasPermission } = usePermissions();
     const canManage = hasPermission('manage_settings');
     const lead = employees.find(e => e.id === project.defaultApproverId);
 
@@ -39,10 +40,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDel
             </div>
             {canManage && (
                 <div className="bg-gray-50 px-4 py-2 border-t flex justify-end space-x-2">
-                    <Button variant="secondary" size="sm" onClick={() => onEdit(project)}>
+                    <Button aria-label="Edit project" variant="secondary" size="sm" onClick={() => onEdit(project)}>
                         <PencilIcon className="w-4 h-4" />
                     </Button>
-                    <Button variant="secondary" size="sm" className="text-red-600 hover:bg-red-50" onClick={() => onDelete(project.id)}>
+                    <Button aria-label="Delete project" variant="secondary" size="sm" className="text-red-600 hover:bg-red-50" onClick={() => onDelete(project.id)}>
                         <TrashIcon className="w-4 h-4" />
                     </Button>
                 </div>

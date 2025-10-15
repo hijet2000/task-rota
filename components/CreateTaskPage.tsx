@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
-import { Button, Input, Select, TagInput } from './ui.tsx';
-import { useAppStore } from '../store/appStore.ts';
-import { getPermissions } from '../lib/permissions.ts';
-import { Task } from '../types.ts';
-import { projects } from '../data/projectData.ts';
-import { employees } from '../data/mockData.ts';
+import { Button, Input, Select, TagInput } from './ui';
+import { useAppStore } from '../store/appStore';
+import { usePermissions } from '../hooks/usePermissions';
+import { Task } from '../types';
+import { projects } from '../data/projectData';
+import { employees } from '../data/mockData';
 
 interface CreateTaskPageProps {
     onTaskCreated: (task: Task) => void;
@@ -14,7 +13,7 @@ interface CreateTaskPageProps {
 
 export const CreateTaskPage: React.FC<CreateTaskPageProps> = ({ onTaskCreated, onCancel }) => {
     const { addTask } = useAppStore();
-    const { currentUser } = getPermissions();
+    const { currentUser } = usePermissions();
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -24,6 +23,7 @@ export const CreateTaskPage: React.FC<CreateTaskPageProps> = ({ onTaskCreated, o
     const [dueDate, setDueDate] = useState('');
     const [labels, setLabels] = useState<string[]>([]);
     const [errors, setErrors] = useState<Partial<Record<keyof Task, string>>>({});
+    const [isCreating, setIsCreating] = useState(false);
 
     const validateForm = (): boolean => {
         const newErrors: Partial<Record<keyof Task, string>> = {};
@@ -58,6 +58,8 @@ export const CreateTaskPage: React.FC<CreateTaskPageProps> = ({ onTaskCreated, o
         if (!validateForm()) {
             return;
         }
+
+        setIsCreating(true);
 
         const project = projects.find(p => p.id === projectId);
         const taskCountForProject = useAppStore.getState().tasks.filter(t => t.projectId === projectId).length;
@@ -159,8 +161,10 @@ export const CreateTaskPage: React.FC<CreateTaskPageProps> = ({ onTaskCreated, o
             </div>
 
             <div className="mt-6 flex justify-end space-x-3">
-                <Button variant="secondary" onClick={onCancel}>Cancel</Button>
-                <Button onClick={handleCreateTask}>Create Task</Button>
+                <Button variant="secondary" onClick={onCancel} disabled={isCreating}>Cancel</Button>
+                <Button onClick={handleCreateTask} disabled={isCreating}>
+                    {isCreating ? 'Creating...' : 'Create Task'}
+                </Button>
             </div>
         </div>
     );

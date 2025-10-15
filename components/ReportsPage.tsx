@@ -1,11 +1,11 @@
 import React from 'react';
-import { LaborCostWidget } from './reports/LaborCostWidget.tsx';
-import { CoverageWidget } from './reports/CoverageWidget.tsx';
-import { KpiWidget } from './reports/KpiWidget.tsx';
-import { LatenessHeatmapWidget } from './reports/LatenessHeatmapWidget.tsx';
-import { FairnessWidget } from './reports/FairnessWidget.tsx';
-import { ShiftTaskDashboardWidget } from './reports/ShiftTaskDashboardWidget.tsx';
-import { ManagerAlertsWidget } from './reports/ManagerAlertsWidget.tsx';
+import { LaborCostWidget } from './reports/LaborCostWidget';
+import { CoverageWidget } from './reports/CoverageWidget';
+import { KpiWidget } from './reports/KpiWidget';
+import { LatenessHeatmapWidget } from './reports/LatenessHeatmapWidget';
+import { FairnessWidget } from './reports/FairnessWidget';
+import { ShiftTaskDashboardWidget } from './reports/ShiftTaskDashboardWidget';
+import { ManagerAlertsWidget } from './reports/ManagerAlertsWidget';
 
 export const ReportsPage: React.FC = () => {
     return (

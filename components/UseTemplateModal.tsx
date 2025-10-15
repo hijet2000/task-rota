@@ -1,8 +1,9 @@
 
+
 import React from 'react';
-import { Modal, Button, Input, Select } from './ui.tsx';
-import { TaskTemplate } from '../types.ts';
-import { projects } from '../data/projectData.ts';
+import { Modal, Button, Input, Select } from './ui';
+import { TaskTemplate } from '../types';
+import { projects } from '../data/projectData';
 
 interface UseTemplateModalProps {
     isOpen: boolean;

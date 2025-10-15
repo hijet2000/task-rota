@@ -1,19 +1,12 @@
 
 
-
 import React, { useState } from 'react';
-// FIX: Corrected relative import path for types.ts.
-import { TaskTemplate } from '../types.ts';
-// FIX: Corrected relative import path for templatesData.ts.
-import { templates as mockTemplates } from '../data/templatesData.ts';
-// FIX: Corrected relative import path for TemplateCard.tsx.
-import { TemplateCard } from './ShiftTemplateCard.tsx';
-// FIX: Corrected relative import path for TemplateEditorModal.tsx.
-import { TemplateEditorModal } from './ShiftTemplateForm.tsx';
-// FIX: Corrected relative import path for UseTemplateModal.tsx.
-import { UseTemplateModal } from './UseTemplateModal.tsx';
-// FIX: Corrected relative import path for ui.tsx.
-import { Button } from './ui.tsx';
+import { TaskTemplate } from '../types';
+import { templates as mockTemplates } from '../data/templatesData';
+import { TemplateCard } from './ShiftTemplateCard';
+import { TemplateEditorModal } from './ShiftTemplateForm';
+import { UseTemplateModal } from './UseTemplateModal';
+import { Button } from './ui';
 
 export const TemplatesPage: React.FC = () => {
     const [templates, setTemplates] = useState<TaskTemplate[]>(mockTemplates);

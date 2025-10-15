@@ -1,11 +1,8 @@
 
 
-
 import React, { useState } from 'react';
-// FIX: Corrected relative import path for ui.tsx.
-import { Button } from './ui.tsx';
-// FIX: Corrected relative import path for types.ts.
-import { Employee } from '../types.ts';
+import { Button } from './ui';
+import { Employee } from '../types';
 
 interface PinPadProps {
     employee: Employee;

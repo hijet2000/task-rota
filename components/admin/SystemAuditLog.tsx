@@ -1,8 +1,6 @@
 import React from 'react';
-// FIX: Added .ts extension to import path
-import { systemAuditLog } from '../../data/systemAuditLog.ts';
-// FIX: Added .tsx extension to import path
-import { Card, Button, Input } from '../ui.tsx';
+import { systemAuditLog } from '../../data/systemAuditLog';
+import { Card, Button, Input } from '../ui';
 
 export const SystemAuditLog: React.FC = () => {
     return (

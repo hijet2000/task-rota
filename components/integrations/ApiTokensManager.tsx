@@ -1,9 +1,9 @@
 // FIX: Implemented ApiTokensManager component.
 import React, { useState } from 'react';
-import { Card, Button } from '../ui.tsx';
-import { apiTokens } from '../../data/apiTokens.ts';
-import { ApiToken } from '../../types.ts';
-import { ApiTokenModal } from './ApiTokenModal.tsx';
+import { Card, Button } from '../ui';
+import { apiTokens } from '../../data/apiTokens';
+import { ApiToken } from '../../types';
+import { ApiTokenModal } from './ApiTokenModal';
 
 export const ApiTokensManager: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);

@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
-import { Modal, Button, Input } from './ui.tsx';
-import { useAppStore } from '../store/appStore.ts';
-import { Task } from '../types.ts';
+import { Modal, Button, Input } from './ui';
+import { useAppStore } from '../store/appStore';
+import { Task } from '../types';
 
 interface AddRelatedTaskModalProps {
     isOpen: boolean;

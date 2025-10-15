@@ -1,41 +1,51 @@
 
-import React, { useState, useEffect } from 'react';
-import { Sidebar } from './components/Sidebar.tsx';
-import { Header } from './components/Header.tsx';
-import { RotaPage } from './components/RotaPage.tsx';
-import { PeoplePage } from './components/PeoplePage.tsx';
-import { LocationsPage } from './components/LocationsPage.tsx';
-import { SettingsPage } from './components/SettingsPage.tsx';
-import { AdminPage } from './components/AdminPage.tsx';
-import { TimeClockPage } from './components/TimeClockPage.tsx';
-import { TimesheetsPage } from './components/TimesheetsPage.tsx';
-import { LeavePage } from './components/LeavePage.tsx';
-import { ReportsPage } from './components/ReportsPage.tsx';
-import { IntegrationsPage } from './components/IntegrationsPage.tsx';
-import { NotificationsPage } from './components/NotificationsPage.tsx';
-import { AutomationsPage } from './components/AutomationsPage.tsx';
-import { ProjectsPage } from './components/ProjectsPage.tsx';
-import { MyWorkPage } from './components/MyWorkPage.tsx';
-import { TemplatesPage } from './components/ShiftTemplatesPage.tsx';
-import { ProtectedPage } from './components/common/ProtectedPage.tsx';
-import { useViewport } from './hooks/useViewport.ts';
-import { PwaShell } from './components/PwaShell.tsx';
-import { CreateTaskPage } from './components/CreateTaskPage.tsx';
-import { useAppStore } from './store/appStore.ts';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
+import { Sidebar } from './components/Sidebar';
+import { Header } from './components/Header';
+import { useViewport } from './hooks/useViewport';
+import { PwaShell } from './components/PwaShell';
+import { useAppStore } from './store/appStore';
+import { AlertTriangleIcon } from './components/icons';
+
+// Lazy load pages for code splitting and better performance
+const RotaPage = lazy(() => import('./components/RotaPage').then(module => ({ default: module.RotaPage })));
+const PeoplePage = lazy(() => import('./components/PeoplePage').then(module => ({ default: module.PeoplePage })));
+const LocationsPage = lazy(() => import('./components/LocationsPage').then(module => ({ default: module.LocationsPage })));
+const SettingsPage = lazy(() => import('./components/SettingsPage').then(module => ({ default: module.SettingsPage })));
+const AdminPage = lazy(() => import('./components/AdminPage').then(module => ({ default: module.AdminPage })));
+const TimeClockPage = lazy(() => import('./components/TimeClockPage').then(module => ({ default: module.TimeClockPage })));
+const TimesheetsPage = lazy(() => import('./components/TimesheetsPage').then(module => ({ default: module.TimesheetsPage })));
+const LeavePage = lazy(() => import('./components/LeavePage').then(module => ({ default: module.LeavePage })));
+const ReportsPage = lazy(() => import('./components/ReportsPage').then(module => ({ default: module.ReportsPage })));
+const IntegrationsPage = lazy(() => import('./components/IntegrationsPage').then(module => ({ default: module.IntegrationsPage })));
+const NotificationsPage = lazy(() => import('./components/NotificationsPage').then(module => ({ default: module.NotificationsPage })));
+const AutomationsPage = lazy(() => import('./components/AutomationsPage').then(module => ({ default: module.AutomationsPage })));
+const ProjectsPage = lazy(() => import('./components/ProjectsPage').then(module => ({ default: module.ProjectsPage })));
+const MyWorkPage = lazy(() => import('./components/MyWorkPage').then(module => ({ default: module.MyWorkPage })));
+const TemplatesPage = lazy(() => import('./components/ShiftTemplatesPage').then(module => ({ default: module.TemplatesPage })));
+const CreateTaskPage = lazy(() => import('./components/CreateTaskPage').then(module => ({ default: module.CreateTaskPage })));
+const ProtectedPage = lazy(() => import('./components/common/ProtectedPage').then(module => ({ default: module.ProtectedPage })));
+
+const PageLoader: React.FC = () => (
+  <div className="flex h-full w-full items-center justify-center p-8">
+    <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin"></div>
+  </div>
+);
+
 
 const App: React.FC = () => {
   const { isMobile } = useViewport();
   const [activePage, setActivePage] = useState('Rota');
   const [previousPage, setPreviousPage] = useState('Rota');
   
-  const { isLoading, fetchInitialData } = useAppStore(state => ({
-    isLoading: state.isLoading,
-    fetchInitialData: state.fetchInitialData,
-  }));
+  // Select state and actions separately for stable references to prevent re-renders
+  const isLoading = useAppStore(state => state.isLoading);
+  const error = useAppStore(state => state.error);
+  const fetchInitialData = useAppStore(state => state.fetchInitialData);
 
   useEffect(() => {
     fetchInitialData();
-  }, [fetchInitialData]);
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   const navigateTo = (page: string) => {
     if (activePage !== 'Create Task') {
@@ -43,6 +53,24 @@ const App: React.FC = () => {
     }
     setActivePage(page);
   };
+
+  if (error) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-gray-100">
+        <div className="text-center p-8 bg-white rounded-lg shadow-xl max-w-md">
+          <AlertTriangleIcon className="w-16 h-16 text-red-400 mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-red-600">Failed to Load Application</h1>
+          <p className="mt-2 text-gray-600">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
   
   if (isLoading) {
     return (
@@ -87,7 +115,9 @@ const App: React.FC = () => {
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header title={activePage} onAddTaskClick={() => navigateTo('Create Task')} />
         <main className="flex-1 overflow-x-hidden overflow-y-auto">
-          {renderPage()}
+          <Suspense fallback={<PageLoader />}>
+            {renderPage()}
+          </Suspense>
         </main>
       </div>
     </div>

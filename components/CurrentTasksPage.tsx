@@ -1,12 +1,13 @@
 
+
 import React, { useState, useMemo } from 'react';
-import { Task, Project } from '../types.ts';
-import { useAppStore } from '../store/appStore.ts';
-import { Button } from './ui.tsx';
-import { KanbanBoard } from './KanbanBoard.tsx';
-import { ListView } from './views/ListView.tsx';
-import { CalendarView } from './views/CalendarView.tsx';
-import { TaskDetailView } from './TaskDetailView.tsx';
+import { Task, Project } from '../types';
+import { useAppStore } from '../store/appStore';
+import { Button } from './ui';
+import { KanbanBoard } from './KanbanBoard';
+import { ListView } from './views/ListView';
+import { CalendarView } from './views/CalendarView';
+import { TaskDetailView } from './TaskDetailView';
 
 type ViewMode = 'Board' | 'List' | 'Calendar';
 

@@ -1,15 +1,10 @@
 
 
-
 import React, { useState } from 'react';
-// FIX: Corrected relative import path for ui.tsx.
-import { Button, Input } from './ui.tsx';
-// FIX: Corrected relative import path for PinPad.tsx.
-import { PinPad } from './PinPad.tsx';
-// FIX: Corrected relative import path for mockData.ts.
-import { employees } from '../data/mockData.ts';
-// FIX: Corrected relative import path for types.ts.
-import { Employee } from '../types.ts';
+import { Button, Input } from './ui';
+import { PinPad } from './PinPad';
+import { employees } from '../data/mockData';
+import { Employee } from '../types';
 
 const Clock: React.FC = () => {
     const [time, setTime] = useState(new Date());

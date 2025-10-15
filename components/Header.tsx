@@ -1,11 +1,12 @@
 
+
 import React, { useState } from 'react';
-import { SearchIcon, BellIcon, HelpCircleIcon, PlusIcon } from './icons.tsx';
-import { UserMenu } from './UserMenu.tsx';
-import { SearchResultsModal } from './SearchResultsModal.tsx';
-import { HelpModal } from './HelpModal.tsx';
-import { InboxModal } from './InboxModal.tsx';
-import { Button } from './ui.tsx';
+import { SearchIcon, BellIcon, HelpCircleIcon, PlusIcon } from './icons';
+import { UserMenu } from './UserMenu';
+import { SearchResultsModal } from './SearchResultsModal';
+import { HelpModal } from './HelpModal';
+import { InboxModal } from './InboxModal';
+import { Button } from './ui';
 
 interface HeaderProps {
     title: string;
@@ -26,14 +27,14 @@ export const Header: React.FC<HeaderProps> = ({ title, onAddTaskClick }) => {
                         <PlusIcon className="w-4 h-4 mr-2"/>
                         Create Task
                     </Button>
-                    <button onClick={() => setIsSearchOpen(true)} className="p-2 rounded-full hover:bg-gray-100 text-gray-500">
+                    <button aria-label="Search" onClick={() => setIsSearchOpen(true)} className="p-2 rounded-full hover:bg-gray-100 text-gray-500">
                         <SearchIcon className="w-6 h-6" />
                     </button>
-                    <button onClick={() => setIsInboxOpen(true)} className="p-2 rounded-full hover:bg-gray-100 text-gray-500 relative">
+                    <button aria-label="Notifications" onClick={() => setIsInboxOpen(true)} className="p-2 rounded-full hover:bg-gray-100 text-gray-500 relative">
                         <BellIcon className="w-6 h-6" />
                         <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                     </button>
-                    <button onClick={() => setIsHelpOpen(true)} className="p-2 rounded-full hover:bg-gray-100 text-gray-500">
+                    <button aria-label="Help" onClick={() => setIsHelpOpen(true)} className="p-2 rounded-full hover:bg-gray-100 text-gray-500">
                         <HelpCircleIcon className="w-6 h-6" />
                     </button>
                     <UserMenu />

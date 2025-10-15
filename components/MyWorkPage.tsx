@@ -1,14 +1,15 @@
 
+
 import React, { useMemo, useState } from 'react';
-import { Task, Project } from '../types.ts';
-import { getPermissions } from '../lib/permissions.ts';
-import { TaskCard } from './TaskCard.tsx';
-import { TaskDetailView } from './TaskDetailView.tsx';
-import { useAppStore } from '../store/appStore.ts';
-import { Button } from './ui.tsx';
-import { BulkEditModal } from './BulkEditModal.tsx';
-import { FilterBar, Filters, Sort } from './FilterBar.tsx';
-import { KanbanBoard } from './KanbanBoard.tsx';
+import { Task, Project } from '../types';
+import { usePermissions } from '../hooks/usePermissions';
+import { TaskCard } from './TaskCard';
+import { TaskDetailView } from './TaskDetailView';
+import { useAppStore } from '../store/appStore';
+import { Button } from './ui';
+import { BulkEditModal } from './BulkEditModal';
+import { FilterBar, Filters, Sort } from './FilterBar';
+import { KanbanBoard } from './KanbanBoard';
 
 type ViewMode = 'List' | 'Board';
 
@@ -39,7 +40,7 @@ const getStartOfWeek = (date: Date) => {
 
 
 export const MyWorkPage: React.FC = () => {
-    const { currentUser } = getPermissions();
+    const { currentUser } = usePermissions();
     const { tasks, projects, bulkUpdateTasks } = useAppStore(state => ({
         tasks: state.tasks,
         projects: state.projects,

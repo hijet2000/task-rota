@@ -1,11 +1,10 @@
 
 
 
+
 import React, { useState, useRef } from 'react';
-// FIX: Corrected relative import path for ui.tsx.
-import { Card, Input, Button, Select } from '../ui.tsx';
-// FIX: Corrected relative import path for icons.tsx.
-import { UploadCloudIcon } from '../icons.tsx';
+import { Card, Input, Button, Select } from '../ui';
+import { UploadCloudIcon } from '../icons';
 
 export const GeneralSettings: React.FC = () => {
   const [logoPreview, setLogoPreview] = useState<string | null>('https://i.pravatar.cc/150?u=org');

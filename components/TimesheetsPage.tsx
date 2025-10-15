@@ -1,15 +1,16 @@
 
+
 import React, { useState } from 'react';
-import { generateTimesheets } from '../lib/payroll.ts';
-import { Timesheet } from '../types.ts';
-import { Button } from './ui.tsx';
-import { TimesheetDetailModal } from './TimesheetDetailModal.tsx';
-import { PayrollExportModal } from './PayrollExportModal.tsx';
-import { getPermissions } from '../lib/permissions.ts';
-import { useAppStore } from '../store/appStore.ts';
+import { generateTimesheets } from '../lib/payroll';
+import { Timesheet } from '../types';
+import { Button } from './ui';
+import { TimesheetDetailModal } from './TimesheetDetailModal';
+import { PayrollExportModal } from './PayrollExportModal';
+import { usePermissions } from '../hooks/usePermissions';
+import { useAppStore } from '../store/appStore';
 
 export const TimesheetsPage: React.FC = () => {
-    const { hasPermission } = getPermissions();
+    const { hasPermission } = usePermissions();
     const { employees, shifts } = useAppStore(state => ({
         employees: state.employees,
         shifts: state.shifts,

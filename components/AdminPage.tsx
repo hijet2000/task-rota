@@ -1,11 +1,9 @@
 
+
 import React, { useState } from 'react';
-// FIX: Added .tsx extension to import path
-import { TenantList } from './admin/TenantList.tsx';
-// FIX: Added .tsx extension to import path
-import { SystemAuditLog } from './admin/SystemAuditLog.tsx';
-// FIX: Added .tsx extension to import path
-import { GdprTools } from './admin/GdprTools.tsx';
+import { TenantList } from './admin/TenantList';
+import { SystemAuditLog } from './admin/SystemAuditLog';
+import { GdprTools } from './admin/GdprTools';
 
 type AdminTab = 'Tenants' | 'Audit Log' | 'GDPR Tools';
 

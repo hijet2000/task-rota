@@ -1,7 +1,7 @@
+
 import React from 'react';
-import { Card, Button, Input } from '../ui.tsx';
-// FIX: Corrected import path for tenantAuditLog data.
-import { tenantAuditLog } from '../../data/tenantAuditLog.ts';
+import { Card, Button, Input } from '../ui';
+import { tenantAuditLog } from '../../data/tenantAuditLog';
 
 export const AuditLogSettings: React.FC = () => {
     return (

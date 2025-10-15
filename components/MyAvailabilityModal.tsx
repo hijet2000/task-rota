@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Employee, DailyAvailability } from '../types.ts';
 import { Modal, Button } from './ui.tsx';
 import { AvailabilityEditor } from './AvailabilityEditor.tsx';
-import { getPermissions } from '../lib/permissions.ts';
+import { usePermissions } from '../hooks/usePermissions.ts';
 
 interface MyAvailabilityModalProps {
     isOpen: boolean;
@@ -10,7 +10,7 @@ interface MyAvailabilityModalProps {
 }
 
 export const MyAvailabilityModal: React.FC<MyAvailabilityModalProps> = ({ isOpen, onClose }) => {
-    const { currentUser } = getPermissions();
+    const { currentUser } = usePermissions();
     const [editedAvailability, setEditedAvailability] = useState<DailyAvailability[]>([]);
 
     useEffect(() => {

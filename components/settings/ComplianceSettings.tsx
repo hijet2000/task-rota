@@ -1,8 +1,7 @@
 
-// FIX: Implemented the ComplianceSettings component.
+
 import React, { useState } from 'react';
-// FIX: Corrected import path for UI components.
-import { Card, Button, ToggleSwitch, Input } from '../ui.tsx';
+import { Card, Button, ToggleSwitch, Input } from '../ui';
 
 export const ComplianceSettings: React.FC = () => {
   const [wtd, setWtd] = useState(true);

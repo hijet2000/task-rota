@@ -1,8 +1,9 @@
+
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Input, Select } from './ui.tsx';
-import { Project } from '../types.ts';
-import { workspaces } from '../data/projectData.ts';
-import { employees } from '../data/mockData.ts';
+import { Modal, Button, Input, Select } from './ui';
+import { Project } from '../types';
+import { workspaces } from '../data/projectData';
+import { employees } from '../data/mockData';
 
 interface ProjectFormModalProps {
     isOpen: boolean;
@@ -13,19 +14,27 @@ interface ProjectFormModalProps {
 
 export const ProjectFormModal: React.FC<ProjectFormModalProps> = ({ isOpen, onClose, onSave, project }) => {
     const [formData, setFormData] = useState<Partial<Project>>({});
+    const [errors, setErrors] = useState<Partial<Record<keyof Project, string>>>({});
 
     useEffect(() => {
         if (isOpen) {
             setFormData(project || { name: '', code: '', description: '', workspaceId: workspaces[0].id });
+            setErrors({});
         }
     }, [isOpen, project]);
 
+    const validate = () => {
+        const newErrors: Partial<Record<keyof Project, string>> = {};
+        if (!formData.name?.trim()) newErrors.name = 'Project name is required.';
+        if (!formData.code?.trim()) newErrors.code = 'Project code is required.';
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleSave = () => {
-        if (formData.name && formData.code) {
+        if (validate()) {
             onSave(formData as Project);
             onClose();
-        } else {
-            alert('Project Name and Code are required.');
         }
     };
 
@@ -42,8 +51,8 @@ export const ProjectFormModal: React.FC<ProjectFormModalProps> = ({ isOpen, onCl
             }
         >
             <div className="space-y-4">
-                <Input label="Project Name" value={formData.name || ''} onChange={e => setFormData(f => ({...f, name: e.target.value}))} />
-                <Input label="Project Code" value={formData.code || ''} onChange={e => setFormData(f => ({...f, code: e.target.value}))} helperText="A short, unique identifier (e.g., Q3MKT)." />
+                <Input label="Project Name" value={formData.name || ''} onChange={e => setFormData(f => ({...f, name: e.target.value}))} error={errors.name} />
+                <Input label="Project Code" value={formData.code || ''} onChange={e => setFormData(f => ({...f, code: e.target.value}))} helperText="A short, unique identifier (e.g., Q3MKT)." error={errors.code} />
                 <div>
                     <label className="block text-sm font-medium text-gray-700">Description</label>
                     <textarea 

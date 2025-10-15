@@ -1,6 +1,5 @@
 import React from 'react';
-// FIX: Added .tsx extension to import path.
-import { Modal, Button, Input, Card } from '../ui.tsx';
+import { Modal, Button, Input, Card } from '../ui';
 
 interface ApiTokenModalProps {
     isOpen: boolean;

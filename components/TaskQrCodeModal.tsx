@@ -1,9 +1,7 @@
 import React from 'react';
-// FIX: Added .tsx extension to import path.
-import { Modal, Button } from './ui.tsx';
-// FIX: Added .ts extension to import path.
-import { Task } from '../types.ts';
-import { PrintIcon } from './icons.tsx';
+import { Modal, Button } from './ui';
+import { Task } from '../types';
+import { PrintIcon } from './icons';
 
 interface TaskQrCodeModalProps {
     isOpen: boolean;

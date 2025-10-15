@@ -1,8 +1,8 @@
 // FIX: Implemented MessageLog component.
 import React from 'react';
-import { Card, Button, Input } from './ui.tsx';
-import { notificationLogs } from '../data/notifications.ts';
-import { employees } from '../data/mockData.ts';
+import { Card, Button, Input } from './ui';
+import { notificationLogs } from '../data/notifications';
+import { employees } from '../data/mockData';
 
 export const MessageLog: React.FC = () => {
     const statusColors: Record<string, string> = {

@@ -1,11 +1,10 @@
 
 
+
 import React, { useState } from 'react';
-// FIX: Corrected relative import path for ui.tsx.
-import { Card, Input, Button, ToggleSwitch, Select } from '../ui.tsx';
-// FIX: Corrected relative import path for TemplateLibrary.tsx.
-import { TemplateLibrary } from '../TemplateLibrary.tsx';
-import { useFeatures } from '../../lib/features.ts';
+import { Card, Input, Button, ToggleSwitch, Select } from '../ui';
+import { TemplateLibrary } from '../TemplateLibrary';
+import { useFeatures } from '../../lib/features';
 
 export const NotificationsSettings: React.FC = () => {
     const [email, setEmail] = useState(true);

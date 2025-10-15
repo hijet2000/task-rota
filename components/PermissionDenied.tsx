@@ -1,6 +1,5 @@
 import React from 'react';
-// FIX: Added .tsx extension to import path
-import { AlertTriangleIcon } from './icons.tsx';
+import { AlertTriangleIcon } from './icons';
 
 const PermissionDenied: React.FC = () => {
     return (

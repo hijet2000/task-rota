@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Button } from './ui.tsx';
 import { shifts } from '../data/mockData.ts';
-import { getPermissions } from '../lib/permissions.ts';
+import { usePermissions } from '../hooks/usePermissions.ts';
 
 interface MyShiftsModalProps {
     isOpen: boolean;
@@ -9,7 +9,7 @@ interface MyShiftsModalProps {
 }
 
 export const MyShiftsModal: React.FC<MyShiftsModalProps> = ({ isOpen, onClose }) => {
-    const { currentUser } = getPermissions();
+    const { currentUser } = usePermissions();
     const myShifts = currentUser ? shifts.filter(s => s.employeeId === currentUser.id && s.startTime > new Date()) : [];
 
     return (

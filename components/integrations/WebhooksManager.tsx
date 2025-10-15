@@ -1,16 +1,10 @@
 
 
-
-
 import React, { useState } from 'react';
-// FIX: Corrected relative import path for ui.tsx.
-import { Card, Button } from '../ui.tsx';
-// FIX: Corrected relative import path for webhooks.ts.
-import { webhooks } from '../../data/webhooks.ts';
-// FIX: Corrected relative import path for types.ts.
-import { Webhook } from '../../types.ts';
-// FIX: Corrected relative import path for WebhookFormModal.tsx.
-import { WebhookFormModal } from './WebhookFormModal.tsx';
+import { Card, Button } from '../ui';
+import { webhooks } from '../../data/webhooks';
+import { Webhook } from '../../types';
+import { WebhookFormModal } from './WebhookFormModal';
 
 export const WebhooksManager: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);

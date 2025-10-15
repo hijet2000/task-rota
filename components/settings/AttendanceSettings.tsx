@@ -1,11 +1,10 @@
 
 
 
+
 import React, { useState } from 'react';
-// FIX: Corrected relative import path for ui.tsx.
-import { Card, Input, Select, Button, ToggleSwitch } from '../ui.tsx';
-// FIX: Corrected relative import path for settings.ts.
-import { getSettings, updateSettings, AttendanceSettingsData } from '../../lib/settings.ts';
+import { Card, Input, Select, Button, ToggleSwitch } from '../ui';
+import { getSettings, updateSettings, AttendanceSettingsData } from '../../lib/settings';
 
 export const AttendanceSettings: React.FC = () => {
     const [attendanceSettings, setAttendanceSettings] = useState<AttendanceSettingsData>(getSettings().attendance);

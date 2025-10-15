@@ -1,12 +1,9 @@
 
 
 import React from 'react';
-// FIX: Corrected relative import path for ui.tsx.
-import { Card, Button } from '../ui.tsx';
-// FIX: Corrected relative import path for invoices.ts.
-import { invoiceHistory } from '../../data/invoices.ts';
-// FIX: Corrected relative import path for icons.tsx.
-import { DownloadCloudIcon } from '../icons.tsx';
+import { Card, Button } from '../ui';
+import { invoiceHistory } from '../../data/invoices';
+import { DownloadCloudIcon } from '../icons';
 
 export const BillingHistoryTable: React.FC = () => {
     return (

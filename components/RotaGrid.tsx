@@ -1,6 +1,6 @@
 import React from 'react';
-import { Employee, Shift } from '../types.ts';
-import { ShiftCard } from './ShiftCard.tsx';
+import { Employee, Shift } from '../types';
+import { ShiftCard } from './ShiftCard';
 
 interface RotaGridProps {
     weekDates: Date[];

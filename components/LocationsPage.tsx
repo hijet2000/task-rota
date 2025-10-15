@@ -1,15 +1,16 @@
 
+
 import React, { useState } from 'react';
-import { Location } from '../types.ts';
-import { LocationCard } from './LocationCard.tsx';
-import { LocationForm } from './LocationForm.tsx';
-import { LocationQrCodeModal } from './LocationQrCodeModal.tsx';
-import { Button } from './ui.tsx';
-import { getPermissions } from '../lib/permissions.ts';
-import { useAppStore } from '../store/appStore.ts';
+import { Location } from '../types';
+import { LocationCard } from './LocationCard';
+import { LocationForm } from './LocationForm';
+import { LocationQrCodeModal } from './LocationQrCodeModal';
+import { Button } from './ui';
+import { usePermissions } from '../hooks/usePermissions';
+import { useAppStore } from '../store/appStore';
 
 export const LocationsPage: React.FC = () => {
-    const { hasPermission } = getPermissions();
+    const { hasPermission } = usePermissions();
     const locations = useAppStore(state => state.locations);
     
     // For demo purposes, UI mutations are handled in local state.

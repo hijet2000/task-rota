@@ -1,12 +1,11 @@
 
 
 import React, { useState } from 'react';
-import { Card, Button, Input } from './ui.tsx';
-import { notificationTemplates as mockTemplates } from '../data/notificationTemplates.ts';
-// FIX: Corrected relative import path for types.ts.
-import { NotificationTemplate } from '../types.ts';
-import { TemplateEditorModal } from './TemplateEditorModal.tsx';
-import { PencilIcon, TrashIcon } from './icons.tsx';
+import { Card, Button, Input } from './ui';
+import { notificationTemplates as mockTemplates } from '../data/notificationTemplates';
+import { NotificationTemplate } from '../types';
+import { TemplateEditorModal } from './TemplateEditorModal';
+import { PencilIcon, TrashIcon } from './icons';
 
 interface TemplateLibraryProps {
     isModal?: boolean;

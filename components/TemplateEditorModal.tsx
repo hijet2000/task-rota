@@ -1,9 +1,8 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Input, TagInput, ToggleSwitch, Select } from './ui.tsx';
-// FIX: Corrected relative import path for types.ts.
-import { NotificationTemplate, NotificationChannel } from '../types.ts';
+import { Modal, Button, Input, TagInput, ToggleSwitch, Select } from './ui';
+import { NotificationTemplate, NotificationChannel } from '../types';
 
 interface TemplateEditorModalProps {
     isOpen: boolean;

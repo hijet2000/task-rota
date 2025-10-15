@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
-// FIX: Added .ts extension to import path
-import { automations } from '../data/automationsData.ts';
-// FIX: Added .ts extension to import path
-import { AutomationRule } from '../types.ts';
-// FIX: Added .tsx extension to import path
-import { AutomationRuleCard } from './AutomationRuleCard.tsx';
-// FIX: Added .tsx extension to import path
-import { AutomationBuilderModal } from './AutomationBuilderModal.tsx';
-import { Button } from './ui.tsx';
+import { automations } from '../data/automationsData';
+import { AutomationRule } from '../types';
+import { AutomationRuleCard } from './AutomationRuleCard';
+import { AutomationBuilderModal } from './AutomationBuilderModal';
+import { Button } from './ui';
 
 export const AutomationsPage: React.FC = () => {
     const [rules, setRules] = useState(automations);

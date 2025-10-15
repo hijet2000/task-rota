@@ -1,15 +1,16 @@
 
+
 import React, { useState } from 'react';
-import { Employee } from '../types.ts';
-import { EmployeeForm } from './EmployeeForm.tsx';
-import { AvailabilityModal } from './AvailabilityModal.tsx';
-import { Button, Input } from './ui.tsx';
-import { PlusIcon } from './icons.tsx';
-import { getPermissions } from '../lib/permissions.ts';
-import { useAppStore } from '../store/appStore.ts';
+import { Employee } from '../types';
+import { EmployeeForm } from './EmployeeForm';
+import { AvailabilityModal } from './AvailabilityModal';
+import { Button, Input } from './ui';
+import { PlusIcon } from './icons';
+import { usePermissions } from '../hooks/usePermissions';
+import { useAppStore } from '../store/appStore';
 
 export const PeoplePage: React.FC = () => {
-    const { hasPermission } = getPermissions();
+    const { hasPermission } = usePermissions();
     const canManage = hasPermission('manage_employees');
 
     const employees = useAppStore(state => state.employees);

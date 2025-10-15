@@ -1,6 +1,6 @@
 import React from 'react';
-import { Modal, Button, Input } from './ui.tsx';
-import { HelpCircleIcon, BookOpenIcon } from './icons.tsx';
+import { Modal, Button, Input } from './ui';
+import { HelpCircleIcon, BookOpenIcon } from './icons';
 
 export const HelpModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
     return (

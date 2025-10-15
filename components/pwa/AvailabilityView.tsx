@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { getPermissions } from '../../lib/permissions.ts';
+import { usePermissions } from '../../hooks/usePermissions.ts';
 import { DailyAvailability } from '../../types.ts';
 import { AvailabilityEditor } from '../AvailabilityEditor.tsx';
 import { Button } from '../ui.tsx';
 
 export const AvailabilityView: React.FC = () => {
-    const { currentUser } = getPermissions();
+    const { currentUser } = usePermissions();
     const [availability, setAvailability] = useState<DailyAvailability[]>([]);
 
     useEffect(() => {

@@ -1,9 +1,7 @@
 import React from 'react';
-// FIX: Corrected relative import path for ui.tsx.
-import { Card, Button } from '../ui.tsx';
-// FIX: Corrected relative import path for types.ts.
-import { Plan } from '../../types.ts';
-import { billingDetails } from '../../data/billing.ts';
+import { Card, Button } from '../ui';
+import { Plan } from '../../types';
+import { billingDetails } from '../../data/billing';
 
 interface CurrentPlanCardProps {
     plan: Plan;

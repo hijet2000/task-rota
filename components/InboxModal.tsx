@@ -1,7 +1,7 @@
 
+
 import React from 'react';
-// FIX: Added .tsx extension to import path
-import { Modal, Button } from './ui.tsx';
+import { Modal, Button } from './ui';
 
 const messages = [
     { id: 1, from: 'Alice Johnson (Manager)', subject: 'Rota for next week published', time: '2 hours ago', read: false },

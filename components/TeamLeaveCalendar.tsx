@@ -1,11 +1,8 @@
 
 
-
 import React from 'react';
-// FIX: Corrected relative import path for types.ts.
-import { LeaveRequest, BlackoutDate } from '../types.ts';
-// FIX: Corrected relative import path for mockData.ts.
-import { employees } from '../data/mockData.ts';
+import { LeaveRequest, BlackoutDate } from '../types';
+import { employees } from '../data/mockData';
 
 interface TeamLeaveCalendarProps {
     requests: LeaveRequest[];

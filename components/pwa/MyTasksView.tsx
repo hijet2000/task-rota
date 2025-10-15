@@ -1,9 +1,9 @@
 import React from 'react';
 import { tasks } from '../../data/tasksData.ts';
-import { getPermissions } from '../../lib/permissions.ts';
+import { usePermissions } from '../../hooks/usePermissions.ts';
 
 export const MyTasksView: React.FC = () => {
-    const { currentUser } = getPermissions();
+    const { currentUser } = usePermissions();
     const myTasks = currentUser ? tasks.filter(t => t.assigneeIds.includes(currentUser.id)) : [];
     
     return (

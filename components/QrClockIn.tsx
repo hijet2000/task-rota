@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-// FIX: Added .tsx extension to import path.
-import { Button } from './ui.tsx';
-// FIX: Added .tsx extension to import path.
-import { CameraIcon, CheckCircleIcon } from './icons.tsx';
-// FIX: Added .ts extension to import path.
-import { locations } from '../data/locations.ts';
+import { Button } from './ui';
+import { CameraIcon, CheckCircleIcon } from './icons';
+import { locations } from '../data/locations';
 
 export const QrClockIn: React.FC = () => {
     const [isScanning, setIsScanning] = useState(false);

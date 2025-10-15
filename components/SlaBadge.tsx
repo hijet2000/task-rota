@@ -1,7 +1,6 @@
 import React from 'react';
-import { Task } from '../types.ts';
-// FIX: Alphabetized icon imports for consistency.
-import { ShieldAlertIcon, ShieldCheckIcon, ShieldOffIcon } from './icons.tsx';
+import { Task } from '../types';
+import { ShieldAlertIcon, ShieldCheckIcon, ShieldOffIcon } from './icons';
 
 interface SlaBadgeProps {
     slaState: Task['slaState'];

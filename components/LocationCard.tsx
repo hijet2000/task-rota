@@ -1,9 +1,10 @@
 
+
 import React from 'react';
-import { Location } from '../types.ts';
-import { MapPinIcon, PhoneIcon, QrCodeIcon, PencilIcon } from './icons.tsx';
-import { Button } from './ui.tsx';
-import { getPermissions } from '../lib/permissions.ts';
+import { Location } from '../types';
+import { MapPinIcon, PhoneIcon, QrCodeIcon, PencilIcon } from './icons';
+import { Button } from './ui';
+import { usePermissions } from '../hooks/usePermissions';
 
 interface LocationCardProps {
     location: Location;
@@ -12,7 +13,7 @@ interface LocationCardProps {
 }
 
 export const LocationCard: React.FC<LocationCardProps> = ({ location, onEdit, onShowQr }) => {
-    const { hasPermission } = getPermissions();
+    const { hasPermission } = usePermissions();
 
     return (
         <div className="bg-white rounded-lg shadow-sm border flex flex-col">

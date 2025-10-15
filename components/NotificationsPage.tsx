@@ -1,10 +1,8 @@
 
 
 import React from 'react';
-// FIX: Corrected relative import path for MessageLog.tsx.
-import { MessageLog } from './MessageLog.tsx';
-// FIX: Corrected relative import path for TemplateLibrary.tsx.
-import { TemplateLibrary } from './TemplateLibrary.tsx';
+import { MessageLog } from './MessageLog';
+import { TemplateLibrary } from './TemplateLibrary';
 
 export const NotificationsPage: React.FC = () => {
     return (

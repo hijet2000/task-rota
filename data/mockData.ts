@@ -53,9 +53,8 @@ export const employees: Employee[] = [
   },
 ];
 
-const today = new Date();
 const getShiftDate = (dayOffset: number, hour: number, minute: number = 0) => {
-    const d = new Date(today);
+    const d = new Date();
     d.setDate(d.getDate() + dayOffset);
     d.setHours(hour, minute, 0, 0);
     return d;

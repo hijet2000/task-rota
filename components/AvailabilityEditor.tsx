@@ -1,10 +1,7 @@
 import React from 'react';
-// FIX: Corrected relative import path for types.ts.
-import { DailyAvailability, AvailabilityPeriod, DayOfWeek } from '../types.ts';
-// FIX: Corrected relative import path for ui.tsx.
-import { Button, Input, Select } from './ui.tsx';
-// FIX: Corrected relative import path for icons.tsx.
-import { TrashIcon } from './icons.tsx';
+import { DailyAvailability, AvailabilityPeriod, DayOfWeek } from '../types';
+import { Button, Input, Select } from './ui';
+import { TrashIcon } from './icons';
 
 interface AvailabilityEditorProps {
     availability: DailyAvailability[];

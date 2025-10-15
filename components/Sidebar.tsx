@@ -1,7 +1,7 @@
 import React from 'react';
-import { HomeIcon, BriefcaseIcon, UsersIcon, MapPinIcon, BellIcon, FileCheck2Icon, BarChart2Icon, SettingsIcon, ShieldIcon, ZapIcon, FolderIcon, MessageSquareIcon, ClockIcon } from './icons.tsx';
-import { getPermissions } from '../lib/permissions.ts';
-import { useFeatures } from '../lib/features.ts';
+import { HomeIcon, BriefcaseIcon, UsersIcon, MapPinIcon, BellIcon, FileCheck2Icon, BarChart2Icon, SettingsIcon, ShieldIcon, ZapIcon, FolderIcon, MessageSquareIcon, ClockIcon } from './icons';
+import { usePermissions } from '../hooks/usePermissions';
+import { useFeatures } from '../lib/features';
 
 // A mapping of page names to their icons and paths
 const navItems = [
@@ -28,7 +28,7 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ activePage, setActivePage }) => {
-    const { hasPermission } = getPermissions();
+    const { hasPermission } = usePermissions();
     const { hasFeature } = useFeatures();
     
     return (

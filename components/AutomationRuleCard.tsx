@@ -1,12 +1,9 @@
+
 import React, { useState } from 'react';
-// FIX: Added .ts extension to import path
-import { AutomationRule } from '../types.ts';
-// FIX: Added .tsx extension to import path
-import { Button, ToggleSwitch } from './ui.tsx';
-// FIX: Added .tsx extension to import path
-import { ZapIcon, PlayIcon, InfoIcon } from './icons.tsx';
-// FIX: Added .tsx extension to import path
-import { AutomationLogsModal } from './AutomationLogsModal.tsx';
+import { AutomationRule } from '../types';
+import { Button, ToggleSwitch } from './ui';
+import { ZapIcon, PlayIcon, InfoIcon } from './icons';
+import { AutomationLogsModal } from './AutomationLogsModal';
 
 interface AutomationRuleCardProps {
     rule: AutomationRule;
@@ -32,7 +29,12 @@ export const AutomationRuleCard: React.FC<AutomationRuleCardProps> = ({ rule, on
                 </div>
             </div>
             <div className="bg-gray-50 px-4 py-3 border-t flex justify-between items-center">
-                <ToggleSwitch label="" enabled={rule.isEnabled} setEnabled={onToggle} />
+                <ToggleSwitch 
+                    label="" 
+                    enabled={rule.isEnabled} 
+                    setEnabled={onToggle} 
+                    aria-label={`Enable or disable rule: ${rule.name}`}
+                />
                 <div className="space-x-2">
                     <Button variant="secondary" size="sm" onClick={() => setIsLogsOpen(true)}>Logs</Button>
                     <Button variant="secondary" size="sm" onClick={onEdit}>Edit</Button>
