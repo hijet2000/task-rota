@@ -1,19 +1,18 @@
-
 import React from 'react';
 import { getPermissions } from '../../lib/permissions.ts';
+import PermissionDenied from '../PermissionDenied.tsx';
 
 interface ProtectedProps {
-    children: React.ReactNode;
-    permission: string;
-    fallback?: React.ReactNode;
+  permission: string;
+  children: React.ReactNode;
 }
 
-export const Protected: React.FC<ProtectedProps> = ({ children, permission, fallback = null }) => {
-    const { hasPermission } = getPermissions();
+export const Protected: React.FC<ProtectedProps> = ({ permission, children }) => {
+  const { hasPermission } = getPermissions();
 
-    if (hasPermission(permission)) {
-        return <>{children}</>;
-    }
+  if (!hasPermission(permission)) {
+    return <PermissionDenied />;
+  }
 
-    return <>{fallback}</>;
+  return <>{children}</>;
 };

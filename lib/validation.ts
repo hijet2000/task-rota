@@ -1,6 +1,8 @@
 
+
+
 // FIX: Add validation logic.
-// FIX: Added .ts extension to import path.
+// FIX: Corrected relative import path for types.ts.
 import { Employee } from '../types.ts';
 
 export interface ValidationError {

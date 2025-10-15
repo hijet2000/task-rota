@@ -1,35 +1,27 @@
-
 import React from 'react';
 import { Modal, Button, Input } from './ui.tsx';
+import { HelpCircleIcon, BookOpenIcon } from './icons.tsx';
 
-interface HelpModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-}
-
-export const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose }) => {
+export const HelpModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
     return (
         <Modal
             isOpen={isOpen}
             onClose={onClose}
             title="Help & Support"
-            footer={<Button variant="secondary" onClick={onClose}>Close</Button>}
         >
             <div className="space-y-4">
-                <Input label="" type="search" placeholder="Search our knowledge base..." />
-                <div>
-                    <h3 className="font-semibold mb-2">Frequently Asked Questions</h3>
-                    <ul className="space-y-2 list-disc list-inside text-sm">
-                        <li><a href="#" className="text-blue-600 hover:underline">How do I add a new employee?</a></li>
-                        <li><a href="#" className="text-blue-600 hover:underline">How does shift swapping work?</a></li>
-                        <li><a href="#" className="text-blue-600 hover:underline">Can I export my data?</a></li>
-                    </ul>
-                </div>
-                <div className="pt-4 border-t">
-                    <h3 className="font-semibold mb-2">Contact Support</h3>
-                    <p className="text-sm text-gray-600">
-                        Can't find what you're looking for? Email our support team at <a href="mailto:support@rotaapp.com" className="text-blue-600">support@rotaapp.com</a>.
-                    </p>
+                <Input label="" type="search" placeholder="Search knowledge base..." />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <a href="#" className="block p-4 bg-gray-50 rounded-lg hover:bg-gray-100">
+                        <BookOpenIcon className="w-6 h-6 text-blue-600 mb-2" />
+                        <h4 className="font-semibold">Knowledge Base</h4>
+                        <p className="text-sm text-gray-600">Find articles and tutorials.</p>
+                    </a>
+                     <a href="#" className="block p-4 bg-gray-50 rounded-lg hover:bg-gray-100">
+                        <HelpCircleIcon className="w-6 h-6 text-blue-600 mb-2" />
+                        <h4 className="font-semibold">Contact Support</h4>
+                        <p className="text-sm text-gray-600">Get in touch with our team.</p>
+                    </a>
                 </div>
             </div>
         </Modal>

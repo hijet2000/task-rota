@@ -1,16 +1,18 @@
 
+
+
 import React, { useState, useEffect } from 'react';
-// FIX: Added .tsx extension to import path
+// FIX: Corrected relative import path for ui.tsx.
 import { Card, Button } from '../ui.tsx';
-// FIX: Added .ts extension to import path
+// FIX: Corrected relative import path for roles.ts.
 import { initialRoleDefinitions } from '../../data/roles.ts';
-// FIX: Added .ts extension to import path
+// FIX: Corrected relative import path for types.ts.
 import { RoleDefinition } from '../../types.ts';
-// FIX: Added .ts extension to import path
+// FIX: Corrected relative import path for permissions.ts.
 import { updateRoleDefinitions } from '../../lib/permissions.ts';
-// FIX: Added .tsx extension to import path
+// FIX: Corrected relative import path for RoleEditorModal.tsx.
 import { RoleEditorModal } from './RoleEditorModal.tsx';
-// FIX: Added .tsx extension to import path
+// FIX: Corrected relative import path for icons.tsx.
 import { PencilIcon, TrashIcon } from '../icons.tsx';
 
 export const RolesPermissionsSettings: React.FC = () => {

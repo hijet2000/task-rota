@@ -1,12 +1,15 @@
-
 import React, { useState } from 'react';
-// FIX: Added .tsx extension to import path
+// FIX: Corrected relative import path for ui.tsx.
 import { Card, Button, Input, ToggleSwitch } from '../ui.tsx';
-// FIX: Added .tsx extension to import path
-import { MailIcon, GoogleIcon, MicrosoftIcon, SageIcon } from '../icons.tsx';
+// FIX: Corrected relative import path for icons.tsx.
+import { MailIcon, GoogleIcon, MicrosoftIcon, SageIcon, LinkIcon } from '../icons.tsx';
+import { useFeatures } from '../../lib/features.ts';
 
 export const IntegrationsSettings: React.FC = () => {
   const [useSsl, setUseSsl] = useState(true);
+  const { hasFeature } = useFeatures();
+  const integrationsEnabled = hasFeature('integrations');
+
 
   return (
     <div className="space-y-6">
@@ -23,14 +26,21 @@ export const IntegrationsSettings: React.FC = () => {
                         <GoogleIcon className="w-6 h-6" />
                         <span className="font-medium">Google Calendar</span>
                     </div>
-                    <Button variant="secondary">Connect</Button>
+                    <Button variant="secondary" disabled={!integrationsEnabled}>Connect</Button>
                </div>
                <div className="flex justify-between items-center p-2 rounded-md bg-gray-50">
                     <div className="flex items-center space-x-3">
                         <MicrosoftIcon className="w-6 h-6" />
                         <span className="font-medium">Microsoft Outlook</span>
                     </div>
-                    <Button variant="secondary">Connect</Button>
+                    <Button variant="secondary" disabled={!integrationsEnabled}>Connect</Button>
+               </div>
+               <div className="flex justify-between items-center p-2 rounded-md bg-gray-50">
+                    <div className="flex items-center space-x-3">
+                        <LinkIcon className="w-6 h-6 text-gray-500" />
+                        <span className="font-medium">One.com Calendar</span>
+                    </div>
+                    <Button variant="secondary" disabled={!integrationsEnabled}>Connect</Button>
                </div>
            </div>
         </div>
@@ -38,7 +48,7 @@ export const IntegrationsSettings: React.FC = () => {
         <div className="p-3 border rounded-lg bg-gray-50">
            <div className="flex justify-between items-center">
              <p className="font-medium">Email Ingest</p>
-             <Button variant="secondary" size="sm">Regenerate</Button>
+             <Button variant="secondary" size="sm" disabled={!integrationsEnabled}>Regenerate</Button>
            </div>
            <p className="text-sm text-gray-600 mt-1">Create tasks by sending an email to a unique address per project.</p>
            <div className="mt-2 text-sm font-mono bg-white p-2 rounded border truncate">
@@ -50,7 +60,7 @@ export const IntegrationsSettings: React.FC = () => {
       <Card
         title="Messaging Services"
         description="Configure SMTP for email and connect your WhatsApp Business account."
-        footer={<Button>Save Messaging Settings</Button>}
+        footer={<Button disabled={!integrationsEnabled}>Save Messaging Settings</Button>}
       >
         <div className="p-3 border rounded-lg">
           <p className="font-medium">SMTP for Outbound Email</p>
@@ -58,17 +68,17 @@ export const IntegrationsSettings: React.FC = () => {
             Configure your own SMTP server for sending email notifications.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input label="SMTP Server Host" placeholder="smtp.example.com" />
-            <Input label="SMTP Port" type="number" placeholder="587" />
-            <Input label="SMTP Username" placeholder="your_username" />
-            <Input label="SMTP Password" type="password" />
+            <Input label="SMTP Server Host" placeholder="smtp.example.com" disabled={!integrationsEnabled}/>
+            <Input label="SMTP Port" type="number" placeholder="587" disabled={!integrationsEnabled}/>
+            <Input label="SMTP Username" placeholder="your_username" disabled={!integrationsEnabled}/>
+            <Input label="SMTP Password" type="password" disabled={!integrationsEnabled}/>
           </div>
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input label="From Address" type="email" placeholder="noreply@yourcompany.com" />
-            <ToggleSwitch label="Use SSL/TLS" enabled={useSsl} setEnabled={setUseSsl} />
+            <Input label="From Address" type="email" placeholder="noreply@yourcompany.com" disabled={!integrationsEnabled}/>
+            <ToggleSwitch label="Use SSL/TLS" enabled={useSsl} setEnabled={setUseSsl} disabled={!integrationsEnabled}/>
           </div>
           <div className="mt-4 text-right">
-            <Button variant="secondary">Test Connection</Button>
+            <Button variant="secondary" disabled={!integrationsEnabled}>Test Connection</Button>
           </div>
         </div>
 
@@ -78,11 +88,11 @@ export const IntegrationsSettings: React.FC = () => {
             Connect your WhatsApp Business account to send notifications. Requires a Meta developer account.
           </p>
           <div className="space-y-4">
-            <Input label="API Access Token" type="password" />
-            <Input label="Phone Number ID" placeholder="15550987654" />
+            <Input label="API Access Token" type="password" disabled={!integrationsEnabled}/>
+            <Input label="Phone Number ID" placeholder="15550987654" disabled={!integrationsEnabled}/>
           </div>
           <div className="mt-4 text-right">
-            <Button variant="secondary">Test Connection</Button>
+            <Button variant="secondary" disabled={!integrationsEnabled}>Test Connection</Button>
           </div>
         </div>
       </Card>
@@ -100,7 +110,7 @@ export const IntegrationsSettings: React.FC = () => {
                         <p className="text-xs text-gray-500">Sync approved timesheets directly to Sage Payroll.</p>
                     </div>
                 </div>
-                <Button variant="secondary">Connect</Button>
+                <Button variant="secondary" disabled={!integrationsEnabled}>Connect</Button>
             </div>
         </div>
       </Card>
@@ -111,11 +121,11 @@ export const IntegrationsSettings: React.FC = () => {
       >
          <div className="flex justify-between items-center p-3 border rounded-lg">
             <p className="truncate">Personal Access Tokens (PATs)</p>
-            <Button variant="secondary">Manage Tokens</Button>
+            <Button variant="secondary" disabled={!integrationsEnabled}>Manage Tokens</Button>
         </div>
          <div className="flex justify-between items-center p-3 border rounded-lg">
             <p>Webhooks</p>
-            <Button variant="secondary">Configure Webhooks</Button>
+            <Button variant="secondary" disabled={!integrationsEnabled}>Configure Webhooks</Button>
         </div>
         <p className="text-xs text-gray-500 pt-2">Webhooks can be linked to Rota/Timekeeping events for advanced automation.</p>
       </Card>

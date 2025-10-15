@@ -1,4 +1,4 @@
-// FIX: Added .ts extension to import path
+// FIX: Corrected relative import path for types.ts.
 import { Location } from '../types.ts';
 
 export const locations: Location[] = [
@@ -11,6 +11,7 @@ export const locations: Location[] = [
     holidayCalendar: 'UK',
     timezone: 'Europe/London',
     coordinates: { latitude: 51.5074, longitude: -0.1278 },
+    verificationType: 'GPS',
   },
   {
     id: 2,
@@ -21,5 +22,6 @@ export const locations: Location[] = [
     holidayCalendar: 'UK',
     timezone: 'Europe/London',
     coordinates: { latitude: 51.505, longitude: -0.075 },
+    verificationType: 'None',
   },
 ];

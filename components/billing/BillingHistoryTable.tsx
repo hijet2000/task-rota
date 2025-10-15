@@ -1,9 +1,11 @@
+
+
 import React from 'react';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for ui.tsx.
 import { Card, Button } from '../ui.tsx';
-// FIX: Added .ts extension to import path.
-import { invoiceHistory } from '../../data/billing.ts';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for invoices.ts.
+import { invoiceHistory } from '../../data/invoices.ts';
+// FIX: Corrected relative import path for icons.tsx.
 import { DownloadCloudIcon } from '../icons.tsx';
 
 export const BillingHistoryTable: React.FC = () => {

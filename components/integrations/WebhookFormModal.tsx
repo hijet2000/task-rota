@@ -1,9 +1,11 @@
 
 
+
+
 import React from 'react';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for ui.tsx.
 import { Modal, Button, Input, TagInput } from '../ui.tsx';
-// FIX: Added .ts extension to import path
+// FIX: Corrected relative import path for types.ts.
 import { Webhook } from '../../types.ts';
 
 interface WebhookFormModalProps {

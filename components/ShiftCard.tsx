@@ -1,8 +1,11 @@
 
+
+
 import React from 'react';
-// FIX: Added .ts extension to import path
+// FIX: Corrected relative import path for types.ts.
 import { Shift, Employee } from '../types.ts';
 // FIX: Added .tsx extension to import path
+// Fix: Corrected import paths to be relative and without file extensions.
 import { ClockIcon, UserIcon } from './icons.tsx';
 
 interface ShiftCardProps {

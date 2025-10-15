@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 // FIX: Added .ts extension to import path
 import { automations } from '../data/automationsData.ts';

@@ -1,7 +1,9 @@
+
+
 import React from 'react';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for ApiTokensManager.tsx.
 import { ApiTokensManager } from './integrations/ApiTokensManager.tsx';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for WebhooksManager.tsx.
 import { WebhooksManager } from './integrations/WebhooksManager.tsx';
 
 export const IntegrationsPage: React.FC = () => {

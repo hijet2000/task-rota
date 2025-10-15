@@ -1,11 +1,13 @@
 
+
+
 // FIX: Implemented the missing PayrollExportModal component.
 import React from 'react';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for ui.tsx.
 import { Modal, Button, Select } from './ui.tsx';
-// FIX: Corrected import path for Timesheet type.
+// FIX: Corrected relative import path for types.ts.
 import { Timesheet } from '../types.ts';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for icons.tsx.
 import { DownloadCloudIcon } from './icons.tsx';
 
 interface PayrollExportModalProps {

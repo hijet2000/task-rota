@@ -1,53 +1,27 @@
-
-// FIX: Added .ts extension to import path
-import { Employee, Role, RoleDefinition } from '../types.ts';
-// FIX: Added .ts extension to import path
+import { RoleDefinition, Employee } from '../types.ts';
 import { initialRoleDefinitions } from '../data/roles.ts';
+import { employees } from '../data/mockData.ts';
 
-let activeUser: Employee | null = null;
+// In a real app, this would be a more robust store.
 let roleDefinitions: RoleDefinition[] = initialRoleDefinitions;
-
-export const login = (user: Employee) => {
-    activeUser = user;
-};
-
-export const logout = () => {
-    activeUser = null;
-};
+// Default to Elaine Benes (Manager, ID 9) for demo, who has tasks assigned.
+let currentUser: Employee | null = employees.find(e => e.id === 9) || null;
 
 export const updateRoleDefinitions = (newRoles: RoleDefinition[]) => {
     roleDefinitions = newRoles;
 };
 
-export const getAvailableRoles = (): RoleDefinition[] => {
-    return roleDefinitions;
+export const setCurrentUser = (employee: Employee | null) => {
+    currentUser = employee;
 };
 
 export const getPermissions = () => {
-    // If no user is logged in, return a default state with no permissions.
-    if (!activeUser) {
-        return {
-            currentUser: null,
-            hasPermission: () => false,
-            hasRole: () => false,
-            isOneOfRoles: () => false,
-        };
-    }
-
-    const userRoleDefinition = roleDefinitions.find(rd => rd.name === activeUser!.role);
-    const userPermissions = userRoleDefinition?.permissions || [];
-
-    const hasPermission = (permissionId: string): boolean => {
-        return userPermissions.includes(permissionId);
-    };
-
-    const hasRole = (role: Role): boolean => {
-        return activeUser!.role === role;
-    };
+    const userRole = currentUser ? roleDefinitions.find(r => r.name === currentUser!.role) : null;
+    const permissions = new Set(userRole?.permissions || []);
     
-    const isOneOfRoles = (roles: Role[]): boolean => {
-        return roles.includes(activeUser!.role);
-    }
+    const hasPermission = (permissionId: string) => {
+        return permissions.has(permissionId) || permissions.has('is_super_admin');
+    };
 
-    return { currentUser: activeUser, hasPermission, hasRole, isOneOfRoles };
+    return { currentUser, permissions, hasPermission };
 };

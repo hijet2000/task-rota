@@ -1,13 +1,15 @@
+
+
 import React from 'react';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for ui.tsx.
 import { Button } from '../ui.tsx';
-// FIX: Added .ts extension to import path.
-import { BillingPlan } from '../../types.ts';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for types.ts.
+import { Plan } from '../../types.ts';
+// FIX: Corrected relative import path for icons.tsx.
 import { CheckCircleIcon } from '../icons.tsx';
 
 interface PlanCardProps {
-    plan: BillingPlan;
+    plan: Plan;
     isCurrent: boolean;
 }
 
@@ -23,12 +25,10 @@ export const PlanCard: React.FC<PlanCardProps> = ({ plan, isCurrent }) => {
                 <p className="mt-2 text-3xl font-bold">Custom</p>
             )}
             <ul className="mt-6 space-y-3 text-gray-600 flex-grow">
-                {plan.features.map(feature => (
-                    <li key={feature} className="flex items-start">
-                        <CheckCircleIcon className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                        <span>{feature}</span>
-                    </li>
-                ))}
+                {/* Features for display would be different from feature flags, this is a placeholder */}
+                <li className="flex items-start"><CheckCircleIcon className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" /><span>Up to {plan.userLimit} users</span></li>
+                <li className="flex items-start"><CheckCircleIcon className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" /><span>Basic scheduling</span></li>
+                <li className="flex items-start"><CheckCircleIcon className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" /><span>Time tracking</span></li>
             </ul>
             <div className="mt-8">
                 <Button className="w-full" disabled={isCurrent}>

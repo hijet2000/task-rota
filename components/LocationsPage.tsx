@@ -1,15 +1,16 @@
+
 import React, { useState } from 'react';
 import { Location } from '../types.ts';
-import { useAppStore } from '../store/appStore.ts';
+import { locations as mockLocations } from '../data/locations.ts';
 import { LocationCard } from './LocationCard.tsx';
-import { Button } from './ui.tsx';
-import { LocationFormModal } from './LocationForm.tsx';
+import { LocationForm } from './LocationForm.tsx';
 import { LocationQrCodeModal } from './LocationQrCodeModal.tsx';
-import { EmptyState } from './common/EmptyState.tsx';
-import { MapPinIcon } from './icons.tsx';
+import { Button } from './ui.tsx';
+import { getPermissions } from '../lib/permissions.ts';
 
 export const LocationsPage: React.FC = () => {
-    const { locations, addLocation, updateLocation, deleteLocation } = useAppStore();
+    const { hasPermission } = getPermissions();
+    const [locations, setLocations] = useState<Location[]>(mockLocations);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isQrModalOpen, setIsQrModalOpen] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
@@ -24,22 +25,16 @@ export const LocationsPage: React.FC = () => {
         setIsFormOpen(true);
     };
 
-    const handleDelete = (locationId: number) => {
-        if (window.confirm('Are you sure you want to delete this location?')) {
-            deleteLocation(locationId);
-        }
-    };
-    
     const handleShowQr = (location: Location) => {
         setSelectedLocation(location);
         setIsQrModalOpen(true);
     };
 
-    const handleSave = (locationToSave: Omit<Location, 'id'> | Location) => {
-        if ('id' in locationToSave) {
-            updateLocation(locationToSave);
+    const handleSave = (locationData: Location) => {
+        if (selectedLocation) {
+            setLocations(locations.map(l => l.id === locationData.id ? locationData : l));
         } else {
-            addLocation(locationToSave);
+            setLocations([...locations, { ...locationData, id: Date.now() }]);
         }
         setIsFormOpen(false);
     };
@@ -48,38 +43,24 @@ export const LocationsPage: React.FC = () => {
         <div className="p-4 sm:p-6 lg:p-8">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold">Locations</h1>
-                {locations.length > 0 && <Button onClick={handleAdd}>Add Location</Button>}
+                {hasPermission('manage_locations') && <Button onClick={handleAdd}>Add Location</Button>}
             </div>
-
-            {locations.length === 0 ? (
-                <EmptyState
-                    icon={<MapPinIcon className="w-12 h-12 text-gray-400" />}
-                    title="No locations created"
-                    description="Get started by adding your first work location or site."
-                    actionText="Add Location"
-                    onAction={handleAdd}
-                />
-            ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {locations.map(location => (
-                        <LocationCard 
-                            key={location.id} 
-                            location={location} 
-                            onEdit={handleEdit} 
-                            onDelete={handleDelete}
-                            onShowQr={handleShowQr}
-                        />
-                    ))}
-                </div>
-            )}
-
-            <LocationFormModal 
-                isOpen={isFormOpen}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {locations.map(location => (
+                    <LocationCard 
+                        key={location.id} 
+                        location={location} 
+                        onEdit={() => handleEdit(location)}
+                        onShowQr={() => handleShowQr(location)}
+                    />
+                ))}
+            </div>
+            <LocationForm 
+                isOpen={isFormOpen} 
                 onClose={() => setIsFormOpen(false)}
                 onSave={handleSave}
                 location={selectedLocation}
             />
-            
             <LocationQrCodeModal
                 isOpen={isQrModalOpen}
                 onClose={() => setIsQrModalOpen(false)}

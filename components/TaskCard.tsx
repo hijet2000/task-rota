@@ -11,9 +11,11 @@ import { SlaBadge } from './SlaBadge.tsx';
 interface TaskCardProps {
   task: Task;
   onClick?: () => void;
+  isSelected?: boolean;
+  onSelectToggle?: (taskId: string) => void;
 }
 
-export const TaskCard: React.FC<TaskCardProps> = ({ task, onClick }) => {
+export const TaskCard: React.FC<TaskCardProps> = ({ task, onClick, isSelected, onSelectToggle }) => {
   const assignees = employees.filter(e => task.assigneeIds.includes(e.id));
 
   const priorityColors: Record<Task['priority'], string> = {
@@ -25,13 +27,28 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onClick }) => {
 
   const isOverdue = task.dueDate && new Date(task.dueDate) < new Date();
 
+  const handleCheckboxClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onSelectToggle?.(task.id);
+  };
+
   return (
-    <button
+    <div
       onClick={onClick}
-      className="w-full text-left bg-white rounded-md shadow-sm p-3 border border-gray-200 hover:shadow-md hover:border-blue-500 transition-all group"
+      className={`relative w-full text-left bg-white rounded-md shadow-sm p-3 border hover:shadow-md transition-all group ${isSelected ? 'border-blue-500 ring-2 ring-blue-500' : 'border-gray-200 hover:border-blue-500'}`}
     >
+        {onSelectToggle && (
+            <div className="absolute top-2 right-2 z-10" onClick={handleCheckboxClick}>
+                <input
+                    type="checkbox"
+                    readOnly
+                    checked={!!isSelected}
+                    className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                />
+            </div>
+        )}
       <div className="flex justify-between items-start mb-2">
-        <p className="font-semibold text-sm text-gray-800 group-hover:text-blue-600">{task.title}</p>
+        <p className="font-semibold text-sm text-gray-800 group-hover:text-blue-600 pr-8">{task.title}</p>
         <SlaBadge slaState={task.slaState} />
       </div>
       
@@ -80,6 +97,6 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onClick }) => {
             )}
         </div>
       </div>
-    </button>
+    </div>
   );
 };

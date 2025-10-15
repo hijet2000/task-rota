@@ -1,8 +1,9 @@
 
+
 import React, { useState } from 'react';
 import { Card, Select, Button, Input } from '../ui.tsx';
 import { getSettings, updateSettings } from '../../lib/settings.ts';
-// FIX: Added .ts extension to import path
+// FIX: Corrected relative import path for types.ts.
 import { Location, DayOfWeek } from '../../types.ts';
 
 type HolidayCalendar = Location['holidayCalendar'];

@@ -1,15 +1,22 @@
 import React from 'react';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for ui.tsx.
 import { Card, Button } from '../ui.tsx';
-// FIX: Added .ts extension to import path.
-import { BillingPlan } from '../../types.ts';
+// FIX: Corrected relative import path for types.ts.
+import { Plan } from '../../types.ts';
+import { billingDetails } from '../../data/billing.ts';
 
 interface CurrentPlanCardProps {
-    plan: BillingPlan;
+    plan: Plan;
     activeUsers: number;
 }
 
 export const CurrentPlanCard: React.FC<CurrentPlanCardProps> = ({ plan, activeUsers }) => {
+    const nextBillDate = new Date(billingDetails.nextBillDate).toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+    });
+
     return (
         <Card
             title="Current Plan"
@@ -22,12 +29,12 @@ export const CurrentPlanCard: React.FC<CurrentPlanCardProps> = ({ plan, activeUs
                         <span className="font-semibold text-2xl">£{plan.price}</span> / user / month
                     </p>
                     <p className="text-sm text-gray-500 mt-2">
-                        {activeUsers} of {plan.userLimit} users
+                        {activeUsers} of {plan.userLimit === 'unlimited' ? 'unlimited' : plan.userLimit} users
                     </p>
                 </div>
                 <div className="text-right">
-                    <p className="text-sm text-gray-500">Next bill: July 31, 2024</p>
-                    <p className="text-lg font-semibold">£{plan.price * activeUsers}.00</p>
+                    <p className="text-sm text-gray-500">Next bill: {nextBillDate}</p>
+                    <p className="text-lg font-semibold">£{(plan.price * activeUsers).toFixed(2)}</p>
                 </div>
             </div>
             <div className="mt-4 flex justify-between">

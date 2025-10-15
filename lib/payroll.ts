@@ -1,5 +1,8 @@
+
+
+
 // FIX: Implemented missing payroll logic file.
-// FIX: Added .ts extension to import path
+// FIX: Corrected relative import path for types.ts.
 import { Employee, Shift, Timesheet } from '../types.ts';
 
 // This is a mock function to generate timesheets.

@@ -1,35 +1,31 @@
-
-// FIX: Added .ts extension to import path
+// FIX: Implemented leave requests mock data.
 import { LeaveRequest } from '../types.ts';
 
 export const leaveRequests: LeaveRequest[] = [
     {
         id: 'lr1',
-        employeeId: 2, // Bob Williams
-        // FIX: Changed 'Annual Leave' to 'Annual' to match LeaveType.
+        employeeId: 3, // Bob Williams
+        startDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 5),
+        endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 9),
         type: 'Annual',
-        status: 'Approved',
-        startDate: new Date('2024-09-02'),
-        endDate: new Date('2024-09-06'),
-        notes: 'Family vacation.',
+        status: 'Pending',
+        notes: 'Family vacation.'
     },
     {
         id: 'lr2',
-        employeeId: 4, // Diana Prince
-        // FIX: Changed 'Sick Leave' to 'Sick' to match LeaveType.
+        employeeId: 4, // Charlie Brown
+        startDate: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 1),
+        endDate: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 1),
         type: 'Sick',
-        status: 'Pending',
-        startDate: new Date('2024-08-19'),
-        endDate: new Date('2024-08-19'),
-        notes: 'Feeling unwell.',
+        status: 'Approved',
+        notes: 'Feeling unwell.'
     },
-     {
+    {
         id: 'lr3',
-        employeeId: 3, // Charlie Brown
-        // FIX: Changed 'Annual Leave' to 'Annual' to match LeaveType.
-        type: 'Annual',
+        employeeId: 5, // Diana Prince
+        startDate: new Date(new Date().getFullYear(), new Date().getMonth() + 2, 1),
+        endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 2, 1),
+        type: 'Unpaid',
         status: 'Pending',
-        startDate: new Date('2024-10-07'),
-        endDate: new Date('2024-10-11'),
-    },
+    }
 ];

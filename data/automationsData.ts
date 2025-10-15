@@ -1,97 +1,38 @@
-
-// FIX: Added .ts extension to import path
+// FIX: Implemented automations mock data.
 import { AutomationRule } from '../types.ts';
 
 export const automations: AutomationRule[] = [
     {
         id: 'auto-1',
-        name: 'Assign QA task on Review',
-        description: 'When a task is moved to "In Review", assign it to the QA team lead for approval.',
-        trigger: {
-            type: 'task.status.changed',
-            params: { from: 'In Progress', to: 'In Review' }
-        },
-        // FIX: Added missing 'conditions' property.
-        conditions: [],
-        actions: [
-            {
-                type: 'task.reassign',
-                params: {
-                    assigneeId: 9 // Arthur Admin
-                }
-            }
-        ],
+        name: 'Notify Manager of Urgent Tasks',
+        description: 'When a task is created with "Urgent" priority, send an email to the project lead.',
+        trigger: 'task.created',
+        conditions: [{ field: 'priority', operator: 'equals', value: 'Urgent' }],
+        actions: [{ type: 'notification.send', recipient: 'project.lead', channel: 'Email' }],
         isEnabled: true,
-        lastRun: new Date().toISOString(),
-        runCount: 5,
+        runCount: 12,
+        lastRun: new Date(Date.now() - 3600 * 1000 * 4).toISOString(),
     },
     {
         id: 'auto-2',
-        name: 'Notify Manager of Missed Clock-In',
-        description: 'If a shift starts and the employee has not clocked in, send an alert to their manager.',
-        trigger: {
-            type: 'shift.missed_clock_in',
-            params: {}
-        },
-        // FIX: Added missing 'conditions' property.
+        name: 'Archive Completed Tasks',
+        description: 'When a task has been in "Done" for 7 days, archive it.',
+        trigger: 'task.status.changed',
         conditions: [],
-        actions: [
-            {
-                type: 'notification.send',
-                params: {
-                    recipient: 'manager',
-                    channel: 'Email',
-                    template: 'late_clock_in' // Re-using this template for demo
-                }
-            }
-        ],
+        actions: [],
         isEnabled: true,
-        lastRun: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-        runCount: 1,
+        runCount: 153,
+        lastRun: new Date(Date.now() - 3600 * 1000 * 1).toISOString(),
     },
     {
         id: 'auto-3',
-        name: 'Create Task for Leave Cover',
-        description: 'When a leave request is approved, create a task to find cover for the scheduled shifts.',
-        trigger: {
-            type: 'leave.approved',
-            params: {}
-        },
-        // FIX: Added missing 'conditions' property.
+        name: 'Request Update on Blocked Tasks',
+        description: 'If a task is "Blocked" for more than 3 days, ping the assignee for an update.',
+        trigger: 'task.status.changed',
         conditions: [],
-        actions: [
-            {
-                type: 'task.add_subtask', // A more specific action would be better
-                params: {
-                    title: 'Arrange cover for approved leave',
-                    assigneeId: 2 // Alice Johnson (Manager)
-                }
-            }
-        ],
-        isEnabled: true,
-        lastRun: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-        runCount: 2,
-    },
-    {
-        id: 'auto-4',
-        name: 'Archive Completed Projects',
-        description: 'When a project is moved to "Done", automatically archive it after 30 days of inactivity.',
-        trigger: {
-            type: 'task.status.changed', // Placeholder, would be a project event
-            params: { from: 'In Progress', to: 'Done' }
-        },
-        // FIX: Added missing 'conditions' property.
-        conditions: [],
-        actions: [
-            {
-                type: 'task.set_field', // Placeholder, would be a project action
-                params: {
-                    status: 'Archived',
-                    delay: '30d'
-                }
-            }
-        ],
+        actions: [],
         isEnabled: false,
-        runCount: 0,
+        runCount: 5,
+        lastRun: new Date(Date.now() - 3600 * 1000 * 24 * 5).toISOString(),
     }
 ];

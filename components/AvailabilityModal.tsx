@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-// FIX: Added .ts extension to import path.
+// FIX: Corrected relative import path for types.ts.
 import { Employee, DailyAvailability } from '../types.ts';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for ui.tsx.
 import { Modal, Button } from './ui.tsx';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for AvailabilityEditor.tsx.
 import { AvailabilityEditor } from './AvailabilityEditor.tsx';
 
 interface AvailabilityModalProps {

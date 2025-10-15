@@ -1,24 +1,21 @@
-
-// FIX: Added .ts extension to import path
+// FIX: Implemented apiTokens mock data.
 import { ApiToken } from '../types.ts';
 
 export const apiTokens: ApiToken[] = [
     {
-        id: 'token1',
-        name: 'Production Key',
-        // FIX: Renamed 'token' to 'tokenPrefix' to match the ApiToken type.
-        tokenPrefix: 'prod_sk_..._aBC1',
-        created: '2023-01-15',
-        lastUsed: '2024-07-20',
-        scopes: ['read:shifts', 'write:shifts', 'read:employees'],
+        id: 'tok_1',
+        name: 'My Custom Reporting App',
+        tokenPrefix: 'sk_...a1b2',
+        scopes: ['read:shifts', 'read:employees', 'read:reports'],
+        lastUsed: new Date().toISOString(),
+        createdAt: new Date(new Date().setDate(new Date().getDate() - 7)).toISOString()
     },
     {
-        id: 'token2',
-        name: 'Reporting Integration Key',
-        // FIX: Renamed 'token' to 'tokenPrefix' to match the ApiToken type.
-        tokenPrefix: 'report_sk_..._dEF2',
-        created: '2023-05-10',
+        id: 'tok_2',
+        name: 'Legacy Integration',
+        tokenPrefix: 'sk_...c3d4',
+        scopes: ['read:timesheets'],
         lastUsed: null,
-        scopes: ['read:reports', 'read:timesheets'],
-    },
+        createdAt: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString()
+    }
 ];

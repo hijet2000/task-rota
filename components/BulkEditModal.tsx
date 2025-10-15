@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // FIX: Added .tsx extension to import path
 import { Modal, Button, Select, Input } from './ui.tsx';
 // FIX: Added .ts extension to import path
@@ -10,27 +10,40 @@ interface BulkEditModalProps {
     isOpen: boolean;
     onClose: () => void;
     selectedTaskIds: string[];
+    onApplyChanges: (changes: Partial<Task>) => void;
 }
 
 const statusOptions: Task['status'][] = ['Draft', 'In Progress', 'Blocked', 'In Review', 'Done'];
 const priorityOptions: Task['priority'][] = ['Low', 'Medium', 'High', 'Urgent'];
 
-export const BulkEditModal: React.FC<BulkEditModalProps> = ({ isOpen, onClose, selectedTaskIds }) => {
+export const BulkEditModal: React.FC<BulkEditModalProps> = ({ isOpen, onClose, selectedTaskIds, onApplyChanges }) => {
     const [status, setStatus] = useState('');
     const [priority, setPriority] = useState('');
     const [assigneeId, setAssigneeId] = useState('');
     const [dueDate, setDueDate] = useState('');
+    
+    useEffect(() => {
+        if (!isOpen) {
+            // Reset form when modal is closed
+            setStatus('');
+            setPriority('');
+            setAssigneeId('');
+            setDueDate('');
+        }
+    }, [isOpen]);
 
     const handleApplyChanges = () => {
         const changes: Partial<Task> = {};
         if (status) changes.status = status as Task['status'];
         if (priority) changes.priority = priority as Task['priority'];
         if (assigneeId) changes.assigneeIds = assigneeId === 'unassigned' ? [] : [parseInt(assigneeId, 10)];
-        if (dueDate) changes.dueDate = dueDate;
+        if (dueDate) changes.dueDate = new Date(dueDate).toISOString();
 
-        console.log(`Applying changes to ${selectedTaskIds.length} tasks:`, changes);
-        // In a real app, you would dispatch an action to update these tasks.
-        onClose();
+        if (Object.keys(changes).length > 0) {
+             onApplyChanges(changes);
+        } else {
+            onClose();
+        }
     };
 
     if (!isOpen || selectedTaskIds.length === 0) {

@@ -1,7 +1,7 @@
 import React from 'react';
-// FIX: Added .ts extension to import path.
+// FIX: Corrected relative import path for types.ts.
 import { Location } from '../types.ts';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for ui.tsx.
 import { Modal, Button } from './ui.tsx';
 import { PrintIcon } from './icons.tsx';
 

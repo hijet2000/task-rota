@@ -1,30 +1,11 @@
-// types.ts
-
-export type Page =
-    | 'Rota'
-    | 'Projects'
-    | 'MyWork'
-    | 'AllTasks'
-    | 'People'
-    | 'Locations'
-    | 'Leave'
-    | 'Timesheets'
-    | 'Reports'
-    | 'Automations'
-    | 'Templates'
-    | 'Notifications'
-    | 'Integrations'
-    | 'Settings'
-    | 'Admin';
-
-export type Role = 'Owner' | 'Admin' | 'Manager' | 'Member' | 'Head Chef' | 'QA Lead' | 'Contributor' | 'Viewer' | 'Maintainer';
+// This file contains type definitions for the entire application.
 
 export type DayOfWeek = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
 
 export interface AvailabilityPeriod {
-    startTime: string; // "HH:MM"
-    endTime: string;   // "HH:MM"
-    type: 'unavailable' | 'preferred';
+    startTime: string; // "HH:mm"
+    endTime: string; // "HH:mm"
+    type: 'preferred' | 'unavailable';
 }
 
 export interface DailyAvailability {
@@ -37,29 +18,34 @@ export interface Employee {
     name: string;
     email: string;
     phone: string;
+    role: string;
     avatarUrl: string;
-    role: Role;
     locationId: number;
-    payType: 'hourly' | 'salary';
-    hourlyRate?: number;
+    payType: 'salary' | 'hourly';
     annualSalary?: number;
+    hourlyRate?: number;
     contractedHours: number;
     skills: string[];
     availability: DailyAvailability[];
+    score: number;
 }
 
 export interface Shift {
     id: string;
     employeeId: number | null;
     locationId: number;
-    role: string;
     startTime: Date;
     endTime: Date;
+    role: string;
     unpaidBreakMinutes: number;
     color: string;
-    notes?: string;
+    isPublished: boolean;
 }
 
+export interface Coordinates {
+    latitude: number;
+    longitude: number;
+}
 export interface Location {
     id: number;
     name: string;
@@ -68,25 +54,197 @@ export interface Location {
     phone: string;
     holidayCalendar: 'UK' | 'ZA' | 'ZW';
     timezone: string;
-    coordinates: {
-        latitude: number;
-        longitude: number;
-    };
+    coordinates: Coordinates;
+    verificationType: 'GPS' | 'None';
 }
 
-export interface Holiday {
-    date: string; // YYYY-MM-DD
+export interface Permission {
+    id: string;
+    description: string;
+    category: string;
+}
+export interface RoleDefinition {
     name: string;
-    regions: string[];
+    description: string;
+    isDefault: boolean;
+    permissions: string[];
+}
+
+export interface ChecklistItem {
+    id: string;
+    text: string;
+    isCompleted: boolean;
+}
+
+export interface Task {
+    id: string;
+    code: string;
+    title: string;
+    description: string;
+    status: 'Draft' | 'In Progress' | 'Blocked' | 'In Review' | 'Done';
+    priority: 'Low' | 'Medium' | 'High' | 'Urgent';
+    projectId: string;
+    assigneeIds: number[];
+    reporterId: number;
+    dueDate: string | null;
+    createdAt: string;
+    labels: string[];
+    checklist: ChecklistItem[];
+    attachments: any[];
+    dependencies: string[];
+    relatedTaskIds?: string[];
+    slaState: 'On Time' | 'At Risk' | 'Breached';
+    isPublic: boolean;
+    sharedWith: any[];
+    activity: any[];
+}
+
+export interface Workspace {
+    id: string;
+    name: string;
+}
+
+export interface ProjectMember {
+    userId: number;
+    role: 'Owner' | 'Maintainer' | 'Contributor';
+}
+
+export interface Project {
+    id: string;
+    name: string;
+    code: string;
+    description: string;
+    workspaceId: string;
+    isArchived: boolean;
+    defaultApproverId: number | null;
+    members: ProjectMember[];
+}
+
+
+export type FeatureId =
+  | 'rota'
+  | 'people'
+  | 'locations'
+  | 'leave'
+  | 'time_clock'
+  | 'timesheets'
+  | 'my_work'
+  | 'projects'
+  | 'templates'
+  | 'notifications'
+  | 'reports'
+  | 'automations'
+  | 'integrations'
+  | 'settings'
+  | 'admin';
+
+export interface Plan {
+    id: 'basic' | 'pro' | 'enterprise';
+    name: string;
+    price: number;
+    userLimit: number | 'unlimited';
+    features: FeatureId[];
+}
+
+export interface TaskTemplate {
+    id: string;
+    name: string;
+    description: string;
+    category: string;
+    tasks: Partial<Task>[];
+}
+
+export interface Timesheet {
+    employeeId: number;
+    employeeName: string;
+    payPeriod: { start: Date; end: Date };
+    shifts: Shift[];
+    totalHours: number;
+    totalPay: number;
+    status: 'Pending' | 'Approved' | 'Exported';
+}
+
+export interface ApiToken {
+    id: string;
+    name: string;
+    tokenPrefix: string;
+    scopes: string[];
+    lastUsed: string | null;
+    createdAt: string;
+}
+
+export interface Webhook {
+    id: string;
+    url: string;
+    events: string[];
+    status: 'active' | 'inactive';
+}
+
+export interface BillingPlan {
+  id: string;
+  name: string;
+  price: number;
+  priceId: string;
+  userLimit: number | 'unlimited';
+  features: string[];
+}
+
+export interface Invoice {
+  id: string;
+  date: string;
+  amount: number;
+  status: 'Paid' | 'Due' | 'Overdue';
+  pdfUrl: string;
+}
+
+export interface Tenant {
+    id: string;
+    name: string;
+    planId: Plan['id'];
+    activeUsers: number;
+    status: 'Active' | 'Trial' | 'Suspended';
+    health: 'OK' | 'Error';
+}
+
+export interface SystemAuditLogEntry {
+    id: string;
+    timestamp: Date;
+    user: string;
+    tenantId: string;
+    action: string;
+    details: { ip: string; device: string; };
+}
+
+export interface TenantAuditLogEntry {
+    id: string;
+    timestamp: Date;
+    user: string;
+    action: string;
+    details: { ip: string; device: string; };
+}
+
+export interface Device {
+    id: string;
+    userId: number;
+    deviceName: string;
+    lastSeen: string;
+    ipAddress: string;
+}
+
+export interface Backup {
+    id: string;
+    timestamp: Date;
+    status: 'Success' | 'Failed';
+    type: 'Automatic' | 'Manual';
 }
 
 export interface LeaveRequest {
     id: string;
     employeeId: number;
-    type: 'Annual' | 'Sick' | 'Unpaid';
-    status: 'Pending' | 'Approved' | 'Declined';
     startDate: Date;
     endDate: Date;
+    type: 'Annual' | 'Sick' | 'Unpaid';
+    status: 'Pending' | 'Approved' | 'Declined';
     notes?: string;
 }
 
@@ -98,19 +256,6 @@ export interface BlackoutDate {
     locationIds: number[];
 }
 
-export interface Timesheet {
-    employeeId: number;
-    employeeName: string;
-    payPeriod: {
-        start: Date;
-        end: Date;
-    };
-    shifts: Shift[];
-    totalHours: number;
-    totalPay: number;
-    status: 'Pending' | 'Approved' | 'Exported';
-}
-
 export interface TimeClockEntry {
     id: string;
     employeeId: number;
@@ -120,225 +265,92 @@ export interface TimeClockEntry {
     breaks: { start: Date; end: Date }[];
     photoUrl?: string;
     isVerified: boolean;
-    gps?: { latitude: number; longitude: number };
+    gps: Coordinates;
     status: 'pending' | 'synced' | 'error';
     deviceFingerprint: string;
 }
 
-export interface Device {
-    id: string;
-    userId: number;
-    deviceName: string;
-    lastSeen: string;
-    ipAddress: string;
-}
-
-export interface TenantAuditLogEntry {
-    id: string;
-    timestamp: Date;
-    user: string;
-    action: string;
-    details: {
-        ip: string;
-        device: string;
-        [key: string]: any;
-    };
-}
-
-export interface Backup {
-    id: string;
-    timestamp: Date;
-    status: 'Success' | 'Failed';
-    type: 'Automatic' | 'Manual';
-}
-
-export interface Permission {
-    id: string;
-    description: string;
-}
-
-export interface RoleDefinition {
-    name: Role;
-    description: string;
-    isDefault: boolean;
-    permissions: string[];
-}
-
-export interface ApiToken {
-    id: string;
-    name: string;
-    tokenPrefix: string;
-    created: string;
-    lastUsed: string | null;
-    scopes: string[];
-}
-
-export interface Webhook {
-    id: string;
-    url: string;
-    events: string[];
-    status: 'active' | 'inactive';
-}
-
-export interface BillingPlan {
-  id: 'free' | 'pro' | 'enterprise' | 'Trial';
-  name: string;
-  price: number;
-  priceId: string;
-  userLimit: number | 'unlimited';
-  features: string[];
-}
-
-export interface Invoice {
-    id: string;
-    date: string;
-    amount: number;
-    status: 'Paid' | 'Due' | 'Overdue';
-    pdfUrl: string;
-}
-
-export interface Tenant {
-    id: string;
-    name: string;
-    plan: BillingPlan['id'];
-    activeUsers: number;
-    status: 'Active' | 'Suspended' | 'Trial';
-    health: 'OK' | 'Error';
-}
-
-export interface SystemAuditLogEntry extends TenantAuditLogEntry {
-    tenantId: string;
-}
-
+export type NotificationChannel = 'Email' | 'SMS' | 'In-App' | 'WhatsApp' | 'Custom';
 export interface NotificationTemplate {
     id: string;
     name: string;
     description: string;
     event: string;
     channels: NotificationChannel[];
-    subject?: string;
+    subject: string;
     message: string;
 }
-
-export type NotificationChannel = 'Email' | 'SMS' | 'In-App' | 'WhatsApp' | 'Custom';
 
 export interface NotificationLog {
     id: string;
     timestamp: Date;
     recipientId: number;
-    templateName: string;
     channel: NotificationChannel;
-    status: 'Sent' | 'Delivered' | 'Failed';
+    templateName: string;
+    status: 'Sent' | 'Opened' | 'Failed';
     isRead: boolean;
-}
-
-export interface Workspace {
-    id: string;
-    name: string;
-    description: string;
-}
-
-export interface Project {
-    id: string;
-    name: string;
-    code: string;
-    description: string;
-    workspaceId: string;
-    members: { userId: number; role: Role }[];
-    startDate: string; // YYYY-MM-DD
-    endDate: string; // YYYY-MM-DD
-    status: 'Draft' | 'In Progress' | 'Done' | 'Archived';
-    color: string;
-    tags: string[];
-    isArchived: boolean;
-}
-
-export interface Task {
-    id: string;
-    projectId: string;
-    code: string; // e.g., ROT-123
-    title: string;
-    description: string;
-    status: 'Draft' | 'In Progress' | 'Blocked' | 'In Review' | 'Done';
-    priority: 'Low' | 'Medium' | 'High' | 'Urgent';
-    assigneeIds: number[];
-    dueDate: string | null; // YYYY-MM-DD
-    labels: string[];
-    checklist: { item: string; completed: boolean }[];
-    attachments: { name: string; url: string }[];
-    dependencies: string[]; // array of task IDs
-    createdAt: string;
-    updatedAt: string;
-    slaState: 'On Time' | 'At Risk' | 'Breached' | null;
-    activity: { timestamp: string; user: string; action: string }[];
-    isPublic?: boolean;
-    sharedWith?: number[];
-}
-
-export interface TaskTemplate {
-    id: string;
-    name: string;
-    description: string;
-    category: string;
-    tasks: Omit<Task, 'id' | 'projectId' | 'createdAt' | 'updatedAt' | 'code' | 'slaState' | 'activity'>[];
 }
 
 export interface TimeEntry {
     id: string;
-    taskId: string;
     userId: number;
-    startTime: string; // ISO String
-    endTime: string; // ISO String
+    taskId: string;
+    startTime: string; // ISO string
+    endTime: string; // ISO string
+    duration: number; // seconds
     notes?: string;
 }
 
-export interface AutomationTrigger {
-    type: AutomationTriggerType;
-    params: Record<string, any>;
-}
-
+export type AutomationTriggerType = 'task.created' | 'task.status.changed' | 'task.approaching_due' | 'task.sla.at_risk' | 'form.submitted' | 'shift.published' | 'shift.missed_clock_in' | 'leave.approved' | 'incident.logged';
 export interface AutomationCondition {
     field: string;
     operator: 'equals' | 'not_equals' | 'contains';
     value: any;
 }
-
 export interface AutomationAction {
-    type: string;
-    params: Record<string, any>;
+    type: 'notification.send' | 'task.set_field' | 'task.reassign' | 'webhook.send';
+    [key: string]: any;
 }
 
 export interface AutomationRule {
     id: string;
     name: string;
     description: string;
-    trigger: AutomationTrigger;
+    trigger: AutomationTriggerType;
     conditions: AutomationCondition[];
     actions: AutomationAction[];
     isEnabled: boolean;
-    lastRun?: string;
     runCount: number;
+    lastRun: string | null;
 }
 
-export type AutomationTriggerType =
-  | 'task.created'
-  | 'task.status.changed'
-  | 'task.approaching_due'
-  | 'task.sla.at_risk'
-  | 'form.submitted'
-  | 'shift.published'
-  | 'shift.missed_clock_in'
-  | 'leave.approved'
-  | 'incident.logged';
+export interface ShiftTask {
+    title: string;
+    required: boolean;
+    section: 'start' | 'middle' | 'end';
+    priority: 'Low' | 'Medium' | 'High';
+    frequency: 'per_shift' | 'daily' | 'weekly';
+    dueOffsetMin: number;
+    labels: string[];
+}
+export interface ShiftTaskTemplate {
+    id: string;
+    name: string;
+    description: string;
+    roleTags: string[];
+    locationIds: number[];
+    active: boolean;
+    tasks: ShiftTask[];
+}
 
-
-export interface ModalState {
-    isAddShiftOpen: boolean;
-    isMyShiftsOpen: boolean;
-    isMyAvailabilityOpen: boolean;
-    isInboxOpen: boolean;
-    isHelpOpen: boolean;
-    isQuickAddOpen: boolean;
-// FIX: Added missing isRequestLeaveOpen property to the ModalState type.
-    isRequestLeaveOpen: boolean;
+export interface ShiftTaskInstance {
+    id: string;
+    shiftId: string;
+    shiftTaskTemplateId: string;
+    taskTemplate: ShiftTask;
+    status: 'pending' | 'in_progress' | 'completed' | 'waived';
+    progressEvents: any[];
+    startedAt?: string;
+    completedAt?: string;
+    waivedReason?: string;
 }

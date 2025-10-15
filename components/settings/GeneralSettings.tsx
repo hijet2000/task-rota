@@ -1,8 +1,10 @@
 
+
+
 import React, { useState, useRef } from 'react';
-// FIX: Added .tsx extension to import path
+// FIX: Corrected relative import path for ui.tsx.
 import { Card, Input, Button, Select } from '../ui.tsx';
-// FIX: Added .tsx extension to import path
+// FIX: Corrected relative import path for icons.tsx.
 import { UploadCloudIcon } from '../icons.tsx';
 
 export const GeneralSettings: React.FC = () => {

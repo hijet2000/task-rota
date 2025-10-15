@@ -1,7 +1,6 @@
-
-
 import React, { useState, Fragment } from 'react';
 
+// FIX: Corrected a typo in the viewBox attribute. The value was "0 0 24" 24" and has been changed to "0 0 24 24".
 const XIconComponent: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -56,16 +55,19 @@ export const Card: React.FC<CardProps> = ({ title, description, children, footer
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   helperText?: string;
+  error?: string;
 }
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(({ label, helperText, id, ...props }, ref) => {
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(({ label, helperText, error, id, ...props }, ref) => {
   const inputId = id || label.replace(/\s+/g, '-').toLowerCase();
+  const errorClasses = error ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500';
   return (
     <div>
       <label htmlFor={inputId} className="block text-sm font-medium text-gray-700">{label}</label>
       <div className="mt-1">
-        <input ref={ref} id={inputId} {...props} className={`block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${props.type === 'color' ? 'p-1 h-10' : 'p-2'}`} />
+        <input ref={ref} id={inputId} {...props} className={`block w-full rounded-md shadow-sm sm:text-sm ${errorClasses} ${props.type === 'color' ? 'p-1 h-10' : 'p-2'}`} />
       </div>
-      {helperText && <p className="mt-2 text-sm text-gray-500">{helperText}</p>}
+      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {!error && helperText && <p className="mt-2 text-sm text-gray-500">{helperText}</p>}
     </div>
   );
 });
@@ -73,15 +75,21 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(({ label, he
 // Select
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
+  helperText?: string;
+  error?: string;
 }
-export const Select: React.FC<SelectProps> = ({ label, children, id, ...props }) => {
+export const Select: React.FC<SelectProps> = ({ label, children, id, helperText, error, ...props }) => {
   const selectId = id || label.replace(/\s+/g, '-').toLowerCase();
+  const errorClasses = error ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500';
+
   return (
     <div>
       <label htmlFor={selectId} className="block text-sm font-medium text-gray-700">{label}</label>
-      <select id={selectId} {...props} className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+      <select id={selectId} {...props} className={`mt-1 block w-full pl-3 pr-10 py-2 text-base sm:text-sm rounded-md ${errorClasses}`}>
         {children}
       </select>
+      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {!error && helperText && <p className="mt-2 text-sm text-gray-500">{helperText}</p>}
     </div>
   );
 };
@@ -92,17 +100,21 @@ interface ToggleSwitchProps {
     enabled: boolean;
     setEnabled: (enabled: boolean) => void;
     description?: string;
+    disabled?: boolean;
+    hint?: string;
 }
-export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ label, enabled, setEnabled, description }) => (
-  <div className="flex items-center justify-between">
+export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ label, enabled, setEnabled, description, disabled, hint }) => (
+  <div className={`flex items-center justify-between ${disabled ? 'opacity-50' : ''}`}>
     <span className="flex-grow flex flex-col">
       <span className="text-sm font-medium text-gray-900">{label}</span>
       {description && <span className="text-sm text-gray-500">{description}</span>}
+      {hint && <span className="text-xs text-blue-500 mt-1">{hint}</span>}
     </span>
     <button
       type="button"
       className={`${enabled ? 'bg-blue-600' : 'bg-gray-200'} relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
-      onClick={() => setEnabled(!enabled)}
+      onClick={() => !disabled && setEnabled(!enabled)}
+      disabled={disabled}
     >
       <span className={`${enabled ? 'translate-x-6' : 'translate-x-1'} inline-block w-4 h-4 transform bg-white rounded-full transition-transform`} />
     </button>

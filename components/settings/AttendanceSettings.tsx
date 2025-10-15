@@ -1,8 +1,10 @@
 
+
+
 import React, { useState } from 'react';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for ui.tsx.
 import { Card, Input, Select, Button, ToggleSwitch } from '../ui.tsx';
-// FIX: Added .ts extension to import path.
+// FIX: Corrected relative import path for settings.ts.
 import { getSettings, updateSettings, AttendanceSettingsData } from '../../lib/settings.ts';
 
 export const AttendanceSettings: React.FC = () => {

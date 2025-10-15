@@ -1,11 +1,12 @@
 
+
+
 import React from 'react';
-// FIX: Added .tsx extension to import path
+// FIX: Corrected relative import path for ui.tsx.
 import { Card, Select, Button } from '../ui.tsx';
-// FIX: Imported icons from the central icon library instead of defining them locally.
-// FIX: Added .tsx extension to import path
+// FIX: Corrected relative import path for icons.tsx.
 import { HardDriveIcon, ServerIcon, CheckCircleIcon, XCircleIcon } from '../icons.tsx';
-// FIX: Added .ts extension to import path
+// FIX: Corrected relative import path for backups.ts.
 import { backups } from '../../data/backups.ts';
 
 export const BackupSettings: React.FC = () => {

@@ -1,8 +1,9 @@
 import React from 'react';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for ui.tsx.
 import { Card, Button } from '../ui.tsx';
-// FIX: Added .ts extension to import path.
+// FIX: Corrected relative import path for tenants.ts.
 import { tenants } from '../../data/tenants.ts';
+// FIX: Corrected relative import path for icons.tsx.
 import { CheckCircleIcon, AlertCircleIcon } from '../icons.tsx';
 
 export const TenantList: React.FC = () => {
@@ -38,7 +39,8 @@ export const TenantList: React.FC = () => {
                         {tenants.map(tenant => (
                             <tr key={tenant.id}>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{tenant.name}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{tenant.plan}</td>
+                                {/* FIX: Changed tenant.plan to tenant.planId to match the Tenant type and added capitalize class for display. */}
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">{tenant.planId}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{tenant.activeUsers}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors[tenant.status]}`}>

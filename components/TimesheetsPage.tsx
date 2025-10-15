@@ -1,19 +1,21 @@
 
-
 import React, { useState } from 'react';
-// FIX: Added .ts extension to import path
+// FIX: Corrected relative import path for mockData.ts.
 import { employees, shifts } from '../data/mockData.ts';
-// FIX: Corrected import to get Timesheet from types.ts
+// FIX: Corrected relative import path for payroll.ts.
 import { generateTimesheets } from '../lib/payroll.ts';
+// FIX: Corrected relative import path for types.ts.
 import { Timesheet } from '../types.ts';
-// FIX: Added .tsx extension to import path
+// FIX: Corrected relative import path for ui.tsx.
 import { Button } from './ui.tsx';
-// FIX: Added .tsx extension to import path
+// FIX: Corrected relative import path for TimesheetDetailModal.tsx.
 import { TimesheetDetailModal } from './TimesheetDetailModal.tsx';
-// FIX: Added .tsx extension to import path
+// FIX: Corrected relative import path for PayrollExportModal.tsx.
 import { PayrollExportModal } from './PayrollExportModal.tsx';
+import { getPermissions } from '../lib/permissions.ts';
 
 export const TimesheetsPage: React.FC = () => {
+    const { hasPermission } = getPermissions();
     const [timesheets, setTimesheets] = useState<Timesheet[]>(generateTimesheets(employees, shifts));
     const [selectedTimesheet, setSelectedTimesheet] = useState<Timesheet | null>(null);
     const [isExportModalOpen, setIsExportModalOpen] = useState(false);
@@ -26,10 +28,12 @@ export const TimesheetsPage: React.FC = () => {
         <div className="p-4 sm:p-6 lg:p-8">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold">Timesheets</h1>
-                <div className="space-x-2">
-                    <Button variant="secondary">Approve All</Button>
-                    <Button onClick={() => setIsExportModalOpen(true)}>Export for Payroll</Button>
-                </div>
+                {hasPermission('approve_timesheets') && (
+                    <div className="space-x-2">
+                        <Button variant="secondary">Approve All</Button>
+                        <Button onClick={() => setIsExportModalOpen(true)}>Export for Payroll</Button>
+                    </div>
+                )}
             </div>
             
             <div className="bg-white shadow-sm rounded-lg overflow-hidden">

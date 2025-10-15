@@ -1,13 +1,15 @@
 
 
+
+
 import React, { useState } from 'react';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for ui.tsx.
 import { Card, Button } from '../ui.tsx';
-// FIX: Added .ts extension to import path
+// FIX: Corrected relative import path for webhooks.ts.
 import { webhooks } from '../../data/webhooks.ts';
-// FIX: Added .ts extension to import path
+// FIX: Corrected relative import path for types.ts.
 import { Webhook } from '../../types.ts';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for WebhookFormModal.tsx.
 import { WebhookFormModal } from './WebhookFormModal.tsx';
 
 export const WebhooksManager: React.FC = () => {

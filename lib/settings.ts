@@ -1,5 +1,6 @@
 
-// FIX: Added .ts extension to import path
+
+// FIX: Corrected relative import path for types.ts.
 import { Location } from '../types.ts';
 
 type HolidayCalendar = Location['holidayCalendar'];

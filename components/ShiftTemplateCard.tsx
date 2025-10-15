@@ -1,11 +1,12 @@
 
 
+
 import React from 'react';
-// FIX: Added .ts extension to import path
+// FIX: Corrected relative import path for types.ts.
 import { TaskTemplate } from '../types.ts';
-// FIX: Added .tsx extension to import path
+// FIX: Corrected relative import path for ui.tsx.
 import { Button } from './ui.tsx';
-// FIX: Added .tsx extension to import path
+// FIX: Corrected relative import path for icons.tsx.
 import { FileCheck2Icon } from './icons.tsx';
 
 interface TemplateCardProps {

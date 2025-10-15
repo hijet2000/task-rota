@@ -1,8 +1,11 @@
+
+
+
 // FIX: Implemented the missing RotaStatsPanel component.
 import React from 'react';
-// FIX: Added .ts extension to import path
+// FIX: Corrected relative import path for types.ts.
 import { Shift, Employee } from '../types.ts';
-// FIX: Added .tsx extension to import path
+// FIX: Corrected relative import path for icons.tsx.
 import { BarChart2Icon } from './icons.tsx';
 
 interface RotaStatsPanelProps {
@@ -44,18 +47,17 @@ export const RotaStatsPanel: React.FC<RotaStatsPanelProps> = ({ shifts, employee
         { label: 'Total Shifts', value: totalShifts },
         { label: 'Unassigned Shifts', value: unassignedShifts },
     ];
-
+    
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {stats.map(stat => (
-                <div key={stat.label} className="bg-white p-4 rounded-lg shadow-sm">
-                    <div className="flex justify-between items-center">
-                        <p className="text-sm text-gray-600">{stat.label}</p>
-                        <BarChart2Icon className="w-4 h-4 text-gray-400" />
+        <div className="bg-white rounded-lg shadow-sm border p-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                {stats.map(stat => (
+                    <div key={stat.label}>
+                        <p className="text-sm text-gray-500">{stat.label}</p>
+                        <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
                     </div>
-                    <p className="text-2xl font-bold mt-1">{stat.value}</p>
-                </div>
-            ))}
+                ))}
+            </div>
         </div>
     );
 };

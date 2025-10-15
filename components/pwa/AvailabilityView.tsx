@@ -1,44 +1,31 @@
-import React, { useState } from 'react';
-// FIX: Added .tsx extension to import path
-import { Button } from '../ui.tsx';
+import React, { useState, useEffect } from 'react';
 import { getPermissions } from '../../lib/permissions.ts';
-// FIX: Added .ts extension to import path
-import { DayOfWeek } from '../../types.ts';
-// FIX: Added .tsx extension to import path
+import { DailyAvailability } from '../../types.ts';
 import { AvailabilityEditor } from '../AvailabilityEditor.tsx';
-
-const daysOfWeek: DayOfWeek[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+import { Button } from '../ui.tsx';
 
 export const AvailabilityView: React.FC = () => {
     const { currentUser } = getPermissions();
-    
-    // Ensure currentUser and availability exist, providing a default structure if not.
-    const initialAvailability = currentUser?.availability && currentUser.availability.length === 7
-        ? currentUser.availability
-        : daysOfWeek.map(d => ({ day: d, periods: [] }));
+    const [availability, setAvailability] = useState<DailyAvailability[]>([]);
 
-    const [availability, setAvailability] = useState(initialAvailability);
+    useEffect(() => {
+        if (currentUser) {
+            setAvailability(currentUser.availability);
+        }
+    }, [currentUser]);
 
-    const handleSaveChanges = () => {
-        // In a real app, this would save to a backend.
-        alert('Availability saved!');
-    };
-
-    if (!currentUser) {
-        return <p>Please log in to set availability.</p>
-    }
+    if (!currentUser) return null;
 
     return (
         <div>
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold">Set My Availability</h2>
-                <Button onClick={handleSaveChanges}>Save Changes</Button>
-            </div>
-             <p className="text-sm text-gray-600 mb-4">Set times you are unavailable to work or prefer to work. Any time not covered by a period below is considered fully available.</p>
+            <h2 className="text-xl font-bold mb-4">My Availability</h2>
             <AvailabilityEditor 
                 availability={availability}
                 onAvailabilityChange={setAvailability}
             />
+            <div className="mt-4">
+                <Button className="w-full">Save Changes</Button>
+            </div>
         </div>
     );
 };

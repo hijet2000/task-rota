@@ -1,9 +1,11 @@
 
+
 import React, { useState } from 'react';
-// FIX: Corrected import path for UI components.
+// FIX: Corrected relative import path for ui.tsx.
 import { Card, Input, Button, ToggleSwitch, Select } from '../ui.tsx';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for TemplateLibrary.tsx.
 import { TemplateLibrary } from '../TemplateLibrary.tsx';
+import { useFeatures } from '../../lib/features.ts';
 
 export const NotificationsSettings: React.FC = () => {
     const [email, setEmail] = useState(true);
@@ -14,6 +16,9 @@ export const NotificationsSettings: React.FC = () => {
     const [escalation, setEscalation] = useState(true);
     const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
 
+    const { hasFeature } = useFeatures();
+    const notificationsEnabled = hasFeature('notifications');
+
   return (
     <>
     <div className="space-y-6">
@@ -22,10 +27,26 @@ export const NotificationsSettings: React.FC = () => {
         description="Enable and configure the channels used to send alerts and messages."
         footer={<Button>Save Changes</Button>}
       >
-        <ToggleSwitch label="In-App Notifications" enabled={inApp} setEnabled={setInApp} />
-        <ToggleSwitch label="Email Notifications" enabled={email} setEnabled={setEmail} />
-        <ToggleSwitch label="SMS Notifications" enabled={sms} setEnabled={setSms} description="Requires integration. Additional costs may apply." />
-        <ToggleSwitch label="WhatsApp Notifications" enabled={whatsapp} setEnabled={setWhatsapp} description="Requires integration. Additional costs may apply." />
+        <ToggleSwitch
+            label="In-App Notifications"
+            enabled={inApp} setEnabled={setInApp}
+            disabled={!notificationsEnabled} hint={!notificationsEnabled ? 'Managed by your plan' : undefined}
+        />
+        <ToggleSwitch
+            label="Email Notifications"
+            enabled={email} setEnabled={setEmail}
+            disabled={!notificationsEnabled} hint={!notificationsEnabled ? 'Managed by your plan' : undefined}
+        />
+        <ToggleSwitch
+            label="SMS Notifications"
+            enabled={sms} setEnabled={setSms} description="Requires integration. Additional costs may apply."
+            disabled={!notificationsEnabled} hint={!notificationsEnabled ? 'Managed by your plan' : undefined}
+        />
+        <ToggleSwitch
+            label="WhatsApp Notifications"
+            enabled={whatsapp} setEnabled={setWhatsapp} description="Requires integration. Additional costs may apply."
+            disabled={!notificationsEnabled} hint={!notificationsEnabled ? 'Managed by your plan' : undefined}
+        />
         
         <div className="pt-4">
              <Button variant="secondary" onClick={() => setIsTemplateModalOpen(true)}>Manage Notification Templates</Button>

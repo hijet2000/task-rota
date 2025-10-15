@@ -1,56 +1,70 @@
 import { useState, useMemo } from 'react';
-import { Shift } from '../types.ts';
+import { Employee, Shift } from '../types.ts';
 
-const getWeekDates = (offset: number): Date[] => {
-    const today = new Date();
-    // Adjust for week offset
-    today.setDate(today.getDate() + offset * 7);
-    const dayOfWeek = today.getDay(); // Sunday - 0, Monday - 1
-    // Calculate the offset to get to the previous Monday
-    const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-    const monday = new Date(today.setDate(today.getDate() + mondayOffset));
-
-    // Create an array of 7 dates starting from Monday
-    return Array.from({ length: 7 }).map((_, i) => {
-        const d = new Date(monday);
-        d.setDate(d.getDate() + i);
-        return d;
-    });
+const getStartOfWeek = (date: Date) => {
+    const d = new Date(date);
+    const day = d.getDay();
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+    return new Date(d.setDate(diff));
 };
 
-// FIX: Accept shifts as an argument to make the hook reusable.
-export const useRotaSchedule = (shifts: Shift[]) => {
-    const [weekOffset, setWeekOffset] = useState(0);
+export const useRotaSchedule = (allShifts: Shift[], allEmployees: Employee[]) => {
+    const [currentDate, setCurrentDate] = useState(new Date());
 
-    const weekDates = useMemo(() => getWeekDates(weekOffset), [weekOffset]);
+    const weekDates = useMemo(() => {
+        const startOfWeek = getStartOfWeek(currentDate);
+        return Array.from({ length: 7 }).map((_, i) => {
+            const date = new Date(startOfWeek);
+            date.setDate(date.getDate() + i);
+            return date;
+        });
+    }, [currentDate]);
 
     const shiftsForWeek = useMemo(() => {
-        // FIX: Use the passed shifts array instead of mock data.
-        return shifts.filter(shift => {
-            const shiftDateStr = shift.startTime.toDateString();
-            return weekDates.some(weekDate => weekDate.toDateString() === shiftDateStr);
+        const weekStart = weekDates[0];
+        const weekEnd = new Date(weekDates[6]);
+        weekEnd.setHours(23, 59, 59, 999);
+        return allShifts.filter(shift => shift.startTime >= weekStart && shift.startTime <= weekEnd);
+    }, [allShifts, weekDates]);
+
+    const scheduleDataForWeek = useMemo(() => {
+        const employeeIds = [...new Set(shiftsForWeek.map(s => s.employeeId).filter(id => id !== null))] as number[];
+        
+        return employeeIds.map(employeeId => {
+            const employeeShifts = shiftsForWeek.filter(s => s.employeeId === employeeId);
+            const shiftsByDay = weekDates.map(day => {
+                const shiftsOnDay = employeeShifts.filter(s => s.startTime.toDateString() === day.toDateString());
+                return shiftsOnDay.length > 0 ? shiftsOnDay : null;
+            });
+            return { employeeId, shiftsByDay };
         });
-    // FIX: Add shifts to the dependency array.
-    }, [weekDates, shifts]);
+    }, [shiftsForWeek, weekDates]);
     
     const headerDateString = useMemo(() => {
-        if (weekDates.length < 7) return '';
-        const startDate = weekDates[0];
-        const endDate = weekDates[6];
-
-        const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric' };
-        
-        return `${startDate.toLocaleDateString('en-GB', { month: 'long', day: 'numeric' })} - ${endDate.toLocaleDateString('en-GB', { ...options, year: 'numeric' })}`;
-
+        const start = weekDates[0];
+        const end = weekDates[6];
+        if (start.getMonth() === end.getMonth()) {
+            return `${start.toLocaleDateString('en-GB', { day: 'numeric' })} - ${end.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+        }
+        return `${start.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} - ${end.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}`;
     }, [weekDates]);
 
-    const goToToday = () => setWeekOffset(0);
-    const nextWeek = () => setWeekOffset(prev => prev + 1);
-    const prevWeek = () => setWeekOffset(prev => prev - 1);
+    const goToToday = () => setCurrentDate(new Date());
+    const nextWeek = () => setCurrentDate(d => {
+        const newDate = new Date(d);
+        newDate.setDate(newDate.getDate() + 7);
+        return newDate;
+    });
+    const prevWeek = () => setCurrentDate(d => {
+        const newDate = new Date(d);
+        newDate.setDate(newDate.getDate() - 7);
+        return newDate;
+    });
 
     return {
         weekDates,
         shiftsForWeek,
+        scheduleDataForWeek,
         headerDateString,
         goToToday,
         nextWeek,

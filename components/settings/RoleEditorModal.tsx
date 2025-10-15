@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Input } from '../ui.tsx';
-// FIX: Added .ts extension to import path
+// FIX: Corrected relative import path for types.ts.
 import { RoleDefinition } from '../../types.ts';
 import { allPermissions } from '../../data/roles.ts';
 

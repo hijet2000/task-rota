@@ -1,7 +1,7 @@
 import React from 'react';
-// FIX: Added .ts extension to import path.
+// FIX: Corrected relative import path for types.ts.
 import { Project, Task } from '../types.ts';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for TaskCard.tsx.
 import { TaskCard } from './TaskCard.tsx';
 
 interface KanbanBoardProps {

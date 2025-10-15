@@ -1,5 +1,4 @@
-
-// FIX: Added .ts extension to import path
+// FIX: Corrected relative import path for types.ts.
 import { Webhook } from '../types.ts';
 
 export const webhooks: Webhook[] = [

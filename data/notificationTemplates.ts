@@ -1,5 +1,7 @@
 
-// FIX: Added .ts extension to import path
+
+
+// FIX: Corrected relative import path for types.ts.
 import { NotificationTemplate } from '../types.ts';
 
 export const notificationTemplates: NotificationTemplate[] = [

@@ -1,66 +1,47 @@
 import React, { useState, useEffect } from 'react';
+import { Shift, Employee, Location } from '../types.ts';
 import { Modal, Button, Input, Select } from './ui.tsx';
-import { Employee, Shift, Location } from '../types.ts';
-import { useAppStore } from '../store/appStore.ts';
+import { employees } from '../data/mockData.ts';
+import { locations } from '../data/locations.ts';
 
 interface AddShiftModalProps {
     isOpen: boolean;
     onClose: () => void;
-    shiftToEdit?: Shift | null;
+    onSave: (shift: Shift) => void;
+    shift: Partial<Shift> | null;
+    day: Date | null;
 }
 
-const getInitialState = (shift?: Shift | null) => ({
-    employeeId: shift?.employeeId ?? null,
-    locationId: shift?.locationId ?? 1,
-    role: shift?.role ?? '',
-    date: shift ? new Date(shift.startTime).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-    startTime: shift ? new Date(shift.startTime).toTimeString().substring(0,5) : '09:00',
-    endTime: shift ? new Date(shift.endTime).toTimeString().substring(0,5) : '17:00',
-    unpaidBreakMinutes: shift?.unpaidBreakMinutes ?? 30,
-    color: shift?.color ?? '#3B82F6',
-    notes: shift?.notes ?? '',
-});
-
-export const AddShiftModal: React.FC<AddShiftModalProps> = ({ isOpen, onClose, shiftToEdit }) => {
-    const { employees, locations, addShift, updateShift } = useAppStore();
-    const [formData, setFormData] = useState(getInitialState(shiftToEdit));
+export const AddShiftModal: React.FC<AddShiftModalProps> = ({ isOpen, onClose, onSave, shift, day }) => {
+    const [formData, setFormData] = useState<Partial<Shift>>({});
 
     useEffect(() => {
         if (isOpen) {
-            setFormData(getInitialState(shiftToEdit));
+            const initialData: Partial<Shift> = shift || {
+                employeeId: null,
+                locationId: locations[0]?.id,
+                startTime: day ? new Date(day.setHours(9, 0, 0, 0)) : new Date(),
+                endTime: day ? new Date(day.setHours(17, 0, 0, 0)) : new Date(),
+                role: 'Unassigned',
+                unpaidBreakMinutes: 30,
+                color: '#8B5CF6',
+                isPublished: false,
+            };
+            setFormData(initialData);
         }
-    }, [isOpen, shiftToEdit]);
+    }, [isOpen, shift, day]);
 
     const handleSave = () => {
-        if (!formData.role) {
-            alert('Role is required.');
-            return;
-        }
-
-        const startDateTime = new Date(`${formData.date}T${formData.startTime}`);
-        const endDateTime = new Date(`${formData.date}T${formData.endTime}`);
-        
-        const shiftData = {
-            ...formData,
-            employeeId: formData.employeeId ? Number(formData.employeeId) : null,
-            startTime: startDateTime,
-            endTime: endDateTime,
-        };
-        
-        if (shiftToEdit) {
-            updateShift({ ...shiftToEdit, ...shiftData });
-        } else {
-            addShift(shiftData);
-        }
-        
+        // Validation would go here
+        onSave(formData as Shift);
         onClose();
     };
-
+    
     return (
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            title={shiftToEdit ? "Edit Shift" : "Add Shift"}
+            title={shift?.id ? 'Edit Shift' : 'Add Shift'}
             footer={
                 <div className="space-x-2">
                     <Button variant="secondary" onClick={onClose}>Cancel</Button>
@@ -69,67 +50,38 @@ export const AddShiftModal: React.FC<AddShiftModalProps> = ({ isOpen, onClose, s
             }
         >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Select 
-                    label="Location" 
-                    value={formData.locationId} 
-                    onChange={e => setFormData(f => ({ ...f, locationId: Number(e.target.value) }))}
-                >
-                    {locations.map(loc => <option key={loc.id} value={loc.id}>{loc.name}</option>)}
-                </Select>
-                <Select 
-                    label="Employee (optional)" 
-                    value={formData.employeeId ?? ''} 
-                    onChange={e => setFormData(f => ({ ...f, employeeId: e.target.value ? Number(e.target.value) : null }))}
-                >
+                <Select label="Employee (optional)" value={formData.employeeId || ''} onChange={e => setFormData(f => ({...f, employeeId: e.target.value ? parseInt(e.target.value) : null}))}>
                     <option value="">Unassigned</option>
                     {employees.map(e => <option key={e.id} value={e.id}>{e.name}</option>)}
                 </Select>
-                <Input 
-                    label="Role" 
-                    type="text" 
-                    placeholder="e.g., Barista" 
-                    value={formData.role} 
-                    onChange={e => setFormData(f => ({ ...f, role: e.target.value }))}
-                />
-                <Input 
-                    label="Date" 
-                    type="date" 
-                    value={formData.date} 
-                    onChange={e => setFormData(f => ({ ...f, date: e.target.value }))}
-                />
-                <Input 
-                    label="Start Time" 
-                    type="time" 
-                    value={formData.startTime} 
-                    onChange={e => setFormData(f => ({ ...f, startTime: e.target.value }))}
-                />
-                <Input 
-                    label="End Time" 
-                    type="time" 
-                    value={formData.endTime} 
-                    onChange={e => setFormData(f => ({ ...f, endTime: e.target.value }))}
-                />
-                <Input 
-                    label="Unpaid Break (minutes)" 
-                    type="number" 
-                    value={formData.unpaidBreakMinutes} 
-                    onChange={e => setFormData(f => ({ ...f, unpaidBreakMinutes: Number(e.target.value) }))}
-                />
-                <Input 
-                    label="Color" 
-                    type="color" 
-                    value={formData.color} 
-                    onChange={e => setFormData(f => ({ ...f, color: e.target.value }))}
-                />
-                <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700">Notes (optional)</label>
-                    <textarea 
-                        rows={3} 
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                        value={formData.notes} 
-                        onChange={e => setFormData(f => ({ ...f, notes: e.target.value }))}
-                    />
-                </div>
+                 <Input label="Role / Area" value={formData.role || ''} onChange={e => setFormData(f => ({...f, role: e.target.value}))} />
+                <Select label="Location" value={formData.locationId} onChange={e => setFormData(f => ({...f, locationId: parseInt(e.target.value)}))}>
+                    {locations.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
+                </Select>
+                <Input label="Date" type="date" value={formData.startTime ? formData.startTime.toISOString().split('T')[0] : ''} onChange={e => {
+                    const date = e.target.valueAsDate;
+                    if(date) {
+                         setFormData(f => ({...f, startTime: new Date(date), endTime: new Date(date)}));
+                    }
+                }}/>
+                <Input label="Start Time" type="time" value={formData.startTime ? formData.startTime.toTimeString().slice(0,5) : ''} onChange={e => {
+                     if (formData.startTime) {
+                        const [h, m] = e.target.value.split(':');
+                        const newDate = new Date(formData.startTime);
+                        newDate.setHours(parseInt(h), parseInt(m));
+                        setFormData(f => ({...f, startTime: newDate}));
+                     }
+                }}/>
+                <Input label="End Time" type="time" value={formData.endTime ? formData.endTime.toTimeString().slice(0,5) : ''} onChange={e => {
+                    if (formData.endTime) {
+                        const [h, m] = e.target.value.split(':');
+                        const newDate = new Date(formData.endTime);
+                        newDate.setHours(parseInt(h), parseInt(m));
+                        setFormData(f => ({...f, endTime: newDate}));
+                     }
+                }}/>
+                 <Input label="Unpaid Break (minutes)" type="number" value={formData.unpaidBreakMinutes || 0} onChange={e => setFormData(f => ({...f, unpaidBreakMinutes: parseInt(e.target.value)}))} />
+                 <Input label="Shift Color" type="color" value={formData.color || '#8B5CF6'} onChange={e => setFormData(f => ({...f, color: e.target.value}))} />
             </div>
         </Modal>
     );

@@ -1,12 +1,14 @@
 
+
+
 import React, { useState } from 'react';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for ui.tsx.
 import { Button, Input } from './ui.tsx';
-// FIX: Added .tsx extension to import path.
+// FIX: Corrected relative import path for PinPad.tsx.
 import { PinPad } from './PinPad.tsx';
-// FIX: Added .ts extension to import path.
+// FIX: Corrected relative import path for mockData.ts.
 import { employees } from '../data/mockData.ts';
-// FIX: Added .ts extension to import path.
+// FIX: Corrected relative import path for types.ts.
 import { Employee } from '../types.ts';
 
 const Clock: React.FC = () => {

@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 // FIX: Added .tsx extension to import path
 import { ClockInView } from './ClockInView.tsx';

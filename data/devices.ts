@@ -1,5 +1,7 @@
 
-// FIX: Added .ts extension to import path
+
+
+// FIX: Corrected relative import path for types.ts.
 import { Device } from '../types.ts';
 
 export const devices: Device[] = [

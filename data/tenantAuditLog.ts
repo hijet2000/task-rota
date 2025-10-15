@@ -1,48 +1,29 @@
 
-// FIX: Added .ts extension to import path
+
+
+// FIX: Corrected relative import path for types.ts.
 import { TenantAuditLogEntry } from '../types.ts';
 
 export const tenantAuditLog: TenantAuditLogEntry[] = [
     {
-        id: 'tlog1',
-        timestamp: new Date(),
-        user: 'Alice Johnson',
-        action: 'Updated Shift',
-        details: { ip: '8.8.8.8', device: 'Chrome on macOS' },
-    },
-    {
-        id: 'tlog2',
-        timestamp: new Date(new Date().setHours(new Date().getHours() - 1)),
-        user: 'Alice Johnson',
-        action: 'Published Rota',
-        details: { ip: '8.8.8.8', device: 'Chrome on macOS' },
-    },
-    {
-        id: 'tlog3',
-        timestamp: new Date(new Date().setHours(new Date().getHours() - 3)),
-        user: 'System',
-        action: 'Nightly Backup Succeeded',
-        details: { ip: 'N/A', device: 'System' },
-    },
-    {
-        id: 'tlog4',
+        id: 'log-t-001',
         timestamp: new Date(new Date().setDate(new Date().getDate() - 1)),
-        user: 'Bob Williams',
-        action: 'Clocked In',
-        details: { ip: '192.168.1.101', device: 'ShiftWise Kiosk' },
+        user: 'alice@example.com',
+        action: 'Updated Location',
+        details: { ip: '8.8.8.8', device: 'Chrome on macOS' },
     },
     {
-        id: 'tlog5',
-        timestamp: new Date(new Date().setDate(new Date().getDate() - 2)),
-        user: 'Alice Johnson',
-        action: 'Updated Security Settings',
-        details: { ip: '8.8.4.4', device: 'Safari on iPhone' },
+        id: 'log-t-002',
+        timestamp: new Date(new Date().setHours(new Date().getHours() - 2)),
+        user: 'bob@example.com',
+        action: 'Published Rota',
+        details: { ip: '123.123.123.123', device: 'Safari on iOS' },
     },
     {
-        id: 'tlog6',
-        timestamp: new Date(new Date().setMinutes(new Date().getMinutes() - 10)),
-        user: 'Arthur Admin',
-        action: 'Shared Task',
-        details: { ip: '1.2.3.4', device: 'Chrome on Windows', taskId: 'task-3', sharedWith: 'user:8' },
-    },
+        id: 'log-t-003',
+        timestamp: new Date(),
+        user: 'System',
+        action: 'Generated Payroll Report',
+        details: { ip: 'N/A', device: 'System' },
+    }
 ];
