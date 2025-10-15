@@ -22,33 +22,30 @@
         },
       }
     </script>
-  <script type="importmap">
+    <!-- 
+      ARCHITECTURAL FIX: The importmap has been removed.
+      Module resolution for dependencies like React and Zustand is now handled 
+      by the build process, ensuring consistency with package.json versions.
+    -->
+<script type="importmap">
 {
   "imports": {
-    "react": "https://aistudiocdn.com/react@^19.2.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.22.0",
-    "zustand": "https://aistudiocdn.com/zustand@^5.0.8",
-    "zustand/": "https://aistudiocdn.com/zustand@^5.0.8/",
-    "immer": "https://aistudiocdn.com/immer@^10.1.3",
-    "rrule": "https://aistudiocdn.com/rrule@^2.8.1"
+    "zustand": "https://aistudiocdn.com/zustand@^5.0.8"
   }
 }
 </script>
 </head>
   <body class="bg-gray-50 text-gray-900 antialiased">
     <div id="root"></div>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/service-worker.js').then(registration => {
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-          }, err => {
-            console.log('ServiceWorker registration failed: ', err);
-          });
-        });
-      }
-    </script>
+    <!-- 
+      ARCHITECTURAL FIX: Service worker registration script removed.
+      This prevents aggressive caching issues during development, ensuring 
+      code changes are reflected immediately. The script should be re-enabled 
+      conditionally for production builds to enable PWA functionality.
+    -->
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>

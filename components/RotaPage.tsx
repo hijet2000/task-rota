@@ -1,14 +1,18 @@
 
 import React, { useState, useMemo } from 'react';
 import { RotaGrid } from './RotaGrid.tsx';
-import { employees, shifts } from '../data/mockData.ts';
 import { RotaStatsPanel } from './RotaStatsPanel.tsx';
 import { useRotaSchedule } from '../hooks/useRotaSchedule.ts';
 import { Button, Select } from './ui.tsx';
 import { getPermissions } from '../lib/permissions.ts';
-import { locations } from '../data/locations.ts';
+import { useAppStore } from '../store/appStore.ts';
 
 export const RotaPage: React.FC = () => {
+    const { employees, shifts, locations } = useAppStore(state => ({
+        employees: state.employees,
+        shifts: state.shifts,
+        locations: state.locations,
+    }));
     const { hasPermission } = getPermissions();
     const {
         weekDates,
@@ -25,7 +29,7 @@ export const RotaPage: React.FC = () => {
     const [statusFilter, setStatusFilter] = useState('all');
 
     // Get unique roles for the filter dropdown
-    const uniqueRoles = useMemo(() => ['all', ...Array.from(new Set(shifts.map(s => s.role)))], []);
+    const uniqueRoles = useMemo(() => ['all', ...Array.from(new Set(shifts.map(s => s.role)))], [shifts]);
 
     // Apply filters to the shifts for the current week
     const shiftsForWeek = useMemo(() => {

@@ -76,6 +76,22 @@ export interface ChecklistItem {
     isCompleted: boolean;
 }
 
+export interface ActivityLog {
+    type: 'system';
+    id: string;
+    userId: number;
+    timestamp: string;
+    action: string; // e.g., 'created this task', 'changed the status to "In Progress"'
+}
+
+export interface CommentLog {
+    type: 'comment';
+    id: string;
+    userId: number;
+    timestamp: string;
+    text: string;
+}
+
 export interface Task {
     id: string;
     code: string;
@@ -96,7 +112,7 @@ export interface Task {
     slaState: 'On Time' | 'At Risk' | 'Breached';
     isPublic: boolean;
     sharedWith: any[];
-    activity: any[];
+    activity: (ActivityLog | CommentLog)[];
 }
 
 export interface Workspace {

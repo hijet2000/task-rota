@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Employee } from '../types.ts';
 import { Modal, Button, Input, Select, TagInput } from './ui.tsx';
 import { validateEmployee, ValidationError } from '../lib/validation.ts';
-import { locations } from '../data/locations.ts';
-import { initialRoleDefinitions } from '../data/roles.ts';
+import { useAppStore } from '../store/appStore.ts';
 
 interface EmployeeFormProps {
     isOpen: boolean;
@@ -13,6 +12,10 @@ interface EmployeeFormProps {
 }
 
 export const EmployeeForm: React.FC<EmployeeFormProps> = ({ isOpen, onClose, onSave, employee }) => {
+    const { locations, roles } = useAppStore(state => ({
+        locations: state.locations,
+        roles: state.roles,
+    }));
     const [formData, setFormData] = useState<Partial<Employee>>({});
     const [errors, setErrors] = useState<ValidationError[]>([]);
 
@@ -24,7 +27,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({ isOpen, onClose, onS
             });
             setErrors([]);
         }
-    }, [isOpen, employee]);
+    }, [isOpen, employee, locations]);
     
     const handleSave = () => {
         const validationErrors = validateEmployee(formData);
@@ -55,7 +58,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({ isOpen, onClose, onS
                 <Input label="Email Address" type="email" value={formData.email || ''} onChange={e => setFormData(f => ({...f, email: e.target.value}))} helperText={getError('email')} />
                 <Input label="Phone Number" value={formData.phone || ''} onChange={e => setFormData(f => ({...f, phone: e.target.value}))} />
                 <Select label="Role" value={formData.role} onChange={e => setFormData(f => ({...f, role: e.target.value}))} helperText={getError('role')}>
-                    {initialRoleDefinitions.map(r => <option key={r.name} value={r.name}>{r.name}</option>)}
+                    {roles.map(r => <option key={r.name} value={r.name}>{r.name}</option>)}
                 </Select>
                  <Select label="Primary Location" value={formData.locationId} onChange={e => setFormData(f => ({...f, locationId: parseInt(e.target.value)}))}>
                     {locations.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}

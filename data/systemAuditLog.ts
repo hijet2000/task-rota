@@ -1,6 +1,3 @@
-
-
-
 // FIX: Corrected relative import path for types.ts.
 import { SystemAuditLogEntry } from '../types.ts';
 
@@ -11,7 +8,7 @@ export const systemAuditLog: SystemAuditLogEntry[] = [
         user: 'admin@grandcafe.com',
         tenantId: 'tenant-001',
         action: 'Updated Location',
-        details: { ip: '8.8.8.8', device: 'Chrome on macOS' },
+        details: { ip: 'xxx.xxx.xxx.xxx', device: 'Chrome on macOS' }, // SEC-FIX: Replaced with a non-sensitive placeholder.
     },
     {
         id: 'log-002',
@@ -19,7 +16,7 @@ export const systemAuditLog: SystemAuditLogEntry[] = [
         user: 'super@rotaapp.com',
         tenantId: 'tenant-004',
         action: 'Suspended Tenant',
-        details: { ip: '1.1.1.1', device: 'Chrome on Windows' },
+        details: { ip: 'xxx.xxx.xxx.xxx', device: 'Chrome on Windows' }, // SEC-FIX: Replaced with a non-sensitive placeholder.
     },
     {
         id: 'log-003',
@@ -27,7 +24,7 @@ export const systemAuditLog: SystemAuditLogEntry[] = [
         user: 'manager@dentalcare.com',
         tenantId: 'tenant-002',
         action: 'Published Rota',
-        details: { ip: '123.123.123.123', device: 'Safari on iOS' },
+        details: { ip: 'xxx.xxx.xxx.xxx', device: 'Safari on iOS' }, // SEC-FIX: Replaced with a non-sensitive placeholder.
     },
     {
         id: 'log-004',

@@ -8,24 +8,52 @@ import { Paperclip, MessageSquareIcon, Flag, CalendarIcon, UserIcon, FolderIcon,
 import { useAppStore } from '../store/appStore.ts';
 import { AddRelatedTaskModal } from './AddRelatedTaskModal.tsx';
 import { QuickAddTaskModal } from './QuickAddTaskModal.tsx';
+import { getPermissions } from '../lib/permissions.ts';
 
 interface TaskDetailViewProps {
     task: Task;
     onClose: () => void;
 }
 
-const ActivityItem: React.FC<{ user: string; avatar: string; action: string; time: string; children?: React.ReactNode }> = ({ user, avatar, action, time, children }) => (
-    <div className="flex items-start space-x-3">
-        <img src={avatar} alt={user} className="w-8 h-8 rounded-full" />
-        <div className="flex-1">
-            <p className="text-sm">
-                <span className="font-semibold">{user}</span> {action}
-                <span className="text-gray-500 ml-2">{time}</span>
-            </p>
-            {children && <div className="mt-2 text-sm text-gray-800 bg-gray-50 border rounded-lg p-3">{children}</div>}
+const formatTimeAgo = (isoString: string) => {
+    const date = new Date(isoString);
+    const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
+    let interval = seconds / 31536000;
+    if (interval > 1) return Math.floor(interval) + " years ago";
+    interval = seconds / 2592000;
+    if (interval > 1) return Math.floor(interval) + " months ago";
+    interval = seconds / 86400;
+    if (interval > 1) return Math.floor(interval) + " days ago";
+    interval = seconds / 3600;
+    if (interval > 1) return Math.floor(interval) + " hours ago";
+    interval = seconds / 60;
+    if (interval > 1) return Math.floor(interval) + " minutes ago";
+    return Math.floor(seconds) + " seconds ago";
+};
+
+const ActivityItem: React.FC<{ activity: Task['activity'][0] }> = ({ activity }) => {
+    const user = employees.find(e => e.id === activity.userId);
+    if (!user) return null;
+
+    return (
+        <div className="flex items-start space-x-3">
+            <img src={user.avatarUrl} alt={user.name} className="w-8 h-8 rounded-full" />
+            <div className="flex-1">
+                <div className="flex items-baseline space-x-2">
+                    <p className="font-semibold text-sm">{user.name}</p>
+                    <p className="text-xs text-gray-500">{formatTimeAgo(activity.timestamp)}</p>
+                </div>
+                {activity.type === 'system' ? (
+                     <p className="text-sm text-gray-600">{activity.action}</p>
+                ) : (
+                    <div className="mt-1 text-sm text-gray-800 bg-gray-50 border rounded-lg p-3">
+                        <p>{activity.text}</p>
+                    </div>
+                )}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 const statusIcons: Record<Task['status'], React.FC<any>> = {
     'Done': (props) => <CheckCircleIcon {...props} className="text-green-500" />,
@@ -102,23 +130,28 @@ const Checklist: React.FC<{ task: Task }> = ({ task }) => {
 
 
 export const TaskDetailView: React.FC<TaskDetailViewProps> = ({ task, onClose }) => {
-    const { tasks: allTasks, addDependencies, addTask } = useAppStore(state => ({
+    const { tasks: allTasks, addDependencies, addTask, updateTask, addComment } = useAppStore(state => ({
         tasks: state.tasks,
         addDependencies: state.addDependencies,
         addTask: state.addTask,
+        updateTask: state.updateTask,
+        addComment: state.addComment,
     }));
     
+    const { currentUser } = getPermissions();
     const [isAddRelatedOpen, setIsAddRelatedOpen] = useState(false);
     const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
+    const [commentText, setCommentText] = useState('');
 
     const project = projects.find(p => p.id === task.projectId);
     const reporter = employees.find(e => e.id === task.reporterId);
     
-    const activity = [
-        { user: reporter, action: 'created this task.', time: '2 days ago' },
-        { user: employees.find(e=>e.id === 2), action: 'changed the status to In Progress.', time: '1 day ago' },
-        { user: employees.find(e=>e.id === 5), action: 'commented.', time: '3 hours ago', comment: "The new recipes are almost ready, just waiting for the final tasting session." },
-    ];
+    const handleAddComment = () => {
+        if (commentText.trim()) {
+            addComment(task.id, commentText.trim());
+            setCommentText('');
+        }
+    };
     
     const { dependsOnTasks, blockingTasks } = useMemo(() => {
         const dependsOn = (task.dependencies || []).map(id => allTasks.find(t => t.id === id)).filter(Boolean) as Task[];
@@ -156,6 +189,29 @@ export const TaskDetailView: React.FC<TaskDetailViewProps> = ({ task, onClose })
         };
         addTask(fullTask);
         addDependencies(task.id, [newTaskId]);
+    };
+
+    const handleFieldChange = (updates: Partial<Task>) => {
+        const oldStatus = task.status;
+        const newStatus = updates.status;
+        const activityLog = [];
+
+        if(newStatus && oldStatus !== newStatus && currentUser) {
+            activityLog.push({
+                type: 'system',
+                id: `act_${Date.now()}`,
+                userId: currentUser.id,
+                timestamp: new Date().toISOString(),
+                action: `changed the status to "${newStatus}".`
+            });
+        }
+        
+        updateTask({ ...task, ...updates, activity: [...activityLog, ...task.activity] });
+    };
+
+    const handleAssigneeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedIds = Array.from(e.target.selectedOptions, (option: HTMLOptionElement) => parseInt(option.value, 10));
+        handleFieldChange({ assigneeIds: selectedIds });
     };
     
     const DependencyList: React.FC<{title: string; tasks: Task[]; onAdd?: () => void}> = ({ title, tasks, onAdd }) => (
@@ -228,20 +284,25 @@ export const TaskDetailView: React.FC<TaskDetailViewProps> = ({ task, onClose })
                     <div className="bg-white p-6 rounded-lg shadow-sm border">
                         <h3 className="text-lg font-semibold mb-3">Activity</h3>
                         <div className="space-y-6">
-                            {activity.map((item, index) => item.user && (
-                                 <ActivityItem key={index} user={item.user.name} avatar={item.user.avatarUrl} action={item.action} time={item.time}>
-                                    {item.comment && <p>{item.comment}</p>}
-                                </ActivityItem>
-                            ))}
-                            <div className="flex items-start space-x-3">
-                                <img src={employees[0].avatarUrl} alt={employees[0].name} className="w-8 h-8 rounded-full" />
+                             <div className="flex items-start space-x-3">
+                                <img src={currentUser?.avatarUrl} alt={currentUser?.name} className="w-8 h-8 rounded-full" />
                                 <div className="flex-1">
-                                    <textarea className="w-full border-gray-300 rounded-md shadow-sm" rows={3} placeholder="Add a comment..."></textarea>
+                                    <textarea 
+                                        className="w-full border-gray-300 rounded-md shadow-sm"
+                                        rows={3} 
+                                        placeholder="Add a comment..."
+                                        value={commentText}
+                                        onChange={(e) => setCommentText(e.target.value)}
+                                    ></textarea>
                                     <div className="text-right mt-2">
-                                        <Button>Comment</Button>
+                                        <Button onClick={handleAddComment} disabled={!commentText.trim()}>Comment</Button>
                                     </div>
                                 </div>
                             </div>
+                            <hr />
+                            {task.activity.map((item) => (
+                                <ActivityItem key={item.id} activity={item} />
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -249,24 +310,24 @@ export const TaskDetailView: React.FC<TaskDetailViewProps> = ({ task, onClose })
                 {/* Sidebar */}
                 <div className="lg:col-span-1 space-y-6">
                     <div className="bg-white p-4 rounded-lg shadow-sm border space-y-4">
-                         <Select label="Status" defaultValue={task.status}>
+                         <Select label="Status" value={task.status} onChange={(e) => handleFieldChange({ status: e.target.value as Task['status'] })}>
                             <option>Draft</option>
                             <option>In Progress</option>
                             <option>Blocked</option>
                             <option>In Review</option>
                             <option>Done</option>
                         </Select>
-                        <Select label="Assignees" multiple size={4} value={task.assigneeIds.map(String)}>
+                        <Select label="Assignees" multiple size={4} value={task.assigneeIds.map(String)} onChange={handleAssigneeChange}>
                             {employees.map(e => <option key={e.id} value={e.id}>{e.name}</option>)}
                         </Select>
-                         <Select label="Priority" defaultValue={task.priority}>
+                         <Select label="Priority" value={task.priority} onChange={(e) => handleFieldChange({ priority: e.target.value as Task['priority'] })}>
                             <option>Low</option>
                             <option>Medium</option>
                             <option>High</option>
                             <option>Urgent</option>
                         </Select>
-                        <Input label="Due Date" type="date" defaultValue={task.dueDate ? task.dueDate.split('T')[0] : ''} />
-                        <TagInput label="Labels" tags={task.labels} setTags={() => {}} />
+                        <Input label="Due Date" type="date" value={task.dueDate ? task.dueDate.split('T')[0] : ''} onChange={(e) => handleFieldChange({ dueDate: e.target.value ? new Date(e.target.value).toISOString() : null })} />
+                        <TagInput label="Labels" tags={task.labels} setTags={(newLabels) => handleFieldChange({ labels: newLabels })} />
                         <div>
                              <label className="text-sm font-medium text-gray-700">SLA Status</label>
                              <div className="mt-1"><SlaBadge slaState={task.slaState} /></div>

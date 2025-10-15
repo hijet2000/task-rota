@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sidebar } from './components/Sidebar.tsx';
 import { Header } from './components/Header.tsx';
 import { RotaPage } from './components/RotaPage.tsx';
@@ -21,20 +21,39 @@ import { ProtectedPage } from './components/common/ProtectedPage.tsx';
 import { useViewport } from './hooks/useViewport.ts';
 import { PwaShell } from './components/PwaShell.tsx';
 import { CreateTaskPage } from './components/CreateTaskPage.tsx';
+import { useAppStore } from './store/appStore.ts';
 
 const App: React.FC = () => {
   const { isMobile } = useViewport();
   const [activePage, setActivePage] = useState('Rota');
   const [previousPage, setPreviousPage] = useState('Rota');
+  
+  const { isLoading, fetchInitialData } = useAppStore(state => ({
+    isLoading: state.isLoading,
+    fetchInitialData: state.fetchInitialData,
+  }));
+
+  useEffect(() => {
+    fetchInitialData();
+  }, [fetchInitialData]);
 
   const navigateTo = (page: string) => {
-    // Only update previous page if it's not the create task page itself
-    // to avoid a loop if the user cancels and then creates again.
     if (activePage !== 'Create Task') {
       setPreviousPage(activePage);
     }
     setActivePage(page);
   };
+  
+  if (isLoading) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="mt-4 text-lg font-semibold text-gray-700">Loading Application Data...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (isMobile) {
     return <PwaShell />;

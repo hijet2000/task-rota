@@ -1,18 +1,19 @@
 
 import React, { useState } from 'react';
 import { Employee } from '../types.ts';
-import { employees as mockEmployees } from '../data/mockData.ts';
 import { EmployeeForm } from './EmployeeForm.tsx';
 import { AvailabilityModal } from './AvailabilityModal.tsx';
 import { Button, Input } from './ui.tsx';
 import { PlusIcon } from './icons.tsx';
 import { getPermissions } from '../lib/permissions.ts';
+import { useAppStore } from '../store/appStore.ts';
 
 export const PeoplePage: React.FC = () => {
     const { hasPermission } = getPermissions();
     const canManage = hasPermission('manage_employees');
 
-    const [employees, setEmployees] = useState<Employee[]>(mockEmployees);
+    const employees = useAppStore(state => state.employees);
+    // Local state for modals
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isAvailabilityOpen, setIsAvailabilityOpen] = useState(false);
     const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
@@ -33,11 +34,8 @@ export const PeoplePage: React.FC = () => {
     };
 
     const handleSave = (employeeData: Employee) => {
-        if (selectedEmployee) {
-            setEmployees(employees.map(e => e.id === employeeData.id ? employeeData : e));
-        } else {
-            setEmployees([...employees, { ...employeeData, id: Date.now() }]);
-        }
+        // In a real app, this would trigger a store action to call an API
+        console.log("Saving employee data (not yet implemented in store):", employeeData);
     };
     
     return (

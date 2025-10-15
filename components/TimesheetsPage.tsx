@@ -1,21 +1,20 @@
 
 import React, { useState } from 'react';
-// FIX: Corrected relative import path for mockData.ts.
-import { employees, shifts } from '../data/mockData.ts';
-// FIX: Corrected relative import path for payroll.ts.
 import { generateTimesheets } from '../lib/payroll.ts';
-// FIX: Corrected relative import path for types.ts.
 import { Timesheet } from '../types.ts';
-// FIX: Corrected relative import path for ui.tsx.
 import { Button } from './ui.tsx';
-// FIX: Corrected relative import path for TimesheetDetailModal.tsx.
 import { TimesheetDetailModal } from './TimesheetDetailModal.tsx';
-// FIX: Corrected relative import path for PayrollExportModal.tsx.
 import { PayrollExportModal } from './PayrollExportModal.tsx';
 import { getPermissions } from '../lib/permissions.ts';
+import { useAppStore } from '../store/appStore.ts';
 
 export const TimesheetsPage: React.FC = () => {
     const { hasPermission } = getPermissions();
+    const { employees, shifts } = useAppStore(state => ({
+        employees: state.employees,
+        shifts: state.shifts,
+    }));
+
     const [timesheets, setTimesheets] = useState<Timesheet[]>(generateTimesheets(employees, shifts));
     const [selectedTimesheet, setSelectedTimesheet] = useState<Timesheet | null>(null);
     const [isExportModalOpen, setIsExportModalOpen] = useState(false);

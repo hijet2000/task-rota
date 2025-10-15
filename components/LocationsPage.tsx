@@ -1,16 +1,20 @@
 
 import React, { useState } from 'react';
 import { Location } from '../types.ts';
-import { locations as mockLocations } from '../data/locations.ts';
 import { LocationCard } from './LocationCard.tsx';
 import { LocationForm } from './LocationForm.tsx';
 import { LocationQrCodeModal } from './LocationQrCodeModal.tsx';
 import { Button } from './ui.tsx';
 import { getPermissions } from '../lib/permissions.ts';
+import { useAppStore } from '../store/appStore.ts';
 
 export const LocationsPage: React.FC = () => {
     const { hasPermission } = getPermissions();
-    const [locations, setLocations] = useState<Location[]>(mockLocations);
+    const locations = useAppStore(state => state.locations);
+    
+    // For demo purposes, UI mutations are handled in local state.
+    // A real app would dispatch actions to the store.
+    const [localLocations, setLocalLocations] = useState<Location[]>(locations);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isQrModalOpen, setIsQrModalOpen] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
@@ -32,9 +36,9 @@ export const LocationsPage: React.FC = () => {
 
     const handleSave = (locationData: Location) => {
         if (selectedLocation) {
-            setLocations(locations.map(l => l.id === locationData.id ? locationData : l));
+            setLocalLocations(localLocations.map(l => l.id === locationData.id ? locationData : l));
         } else {
-            setLocations([...locations, { ...locationData, id: Date.now() }]);
+            setLocalLocations([...localLocations, { ...locationData, id: Date.now() }]);
         }
         setIsFormOpen(false);
     };
@@ -46,7 +50,7 @@ export const LocationsPage: React.FC = () => {
                 {hasPermission('manage_locations') && <Button onClick={handleAdd}>Add Location</Button>}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {locations.map(location => (
+                {localLocations.map(location => (
                     <LocationCard 
                         key={location.id} 
                         location={location} 
